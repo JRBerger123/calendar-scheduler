@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Calendar</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="calendar"></div>
+
+  <!-- Modal GUI -->
+    <div id="appointmentModal" class="modal">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h2>Appointment Details</h2>
+		</div>
+		<div class="modal-body">
+		  <label for="fullName">Full Name</label>
+		  <input type="text" id="fullName" name="fullName" />
+		  <label for="email">Email</label>
+		  <input type="text" id="email" name="email" />
+		  <label for="visitCategory">Visit Category</label>
+		  <select id="visitCategory" name="visitCategory">
+			<option value="Advising">Advising</option>
+			<option value="Class Content">Class Content</option>
+			<option value="Other">Other</option>
+		  </select>
+		  <label for="visitReason">Reason for Visit</label>
+		  <textarea id="visitReason" name="visitReason"></textarea>
+		  
+		  <div class="appointment-summary">
+			  <div class="summary-line">
+				<span id="selectedFaculty">Faculty: </span>
+				<span id="selectedDayDate"></span>
+			  </div>
+		    <p id="selectedTime">Time: </p>
+		  
+		    <div class="modal-footer">
+			  <button id="confirmButton">Confirm</button>
+			  <button id="cancelButton">Cancel</button>
+		    </div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+  <script src="script.js"></script> <!-- Link to the external JavaScript file -->
+
+</body>
+</html>

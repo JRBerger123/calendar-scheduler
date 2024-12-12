@@ -1,0 +1,290 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#calendar {
+  height: 100vh; /* Use the full viewport height */
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black background */
+}
+
+.modal-body {
+  padding: 20px;
+  background: white;
+}
+
+.modal-header {
+  font-family: Georgia, serif;
+  font-style: bold;
+  //background-color: #C2C2C2;
+  //background: linear-gradient(to bottom, #d3d3d3 50%, #a9a9a9 100%);
+  background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 92%, rgba(139,139,139,1) 100%);
+  color: #000;
+  padding: 6px;
+  border-bottom: 2px solid black;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  border-top-left-radius: 10px; /* Rounded corners for the top-left */
+  border-top-right-radius: 10px; /* Rounded corners for the top-right */
+}
+
+.modal-time-header {
+  text-align: center;	
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  width: 80%;
+  max-width: 600px;
+  border: 1px solid black;
+}
+
+.modal-content h2 {
+  text-align: center; /* Center the title */
+  font-size: 2.6rem; /* Adjust font size as needed */
+  margin-bottom: 18px;
+  margin-top: 18px;
+}
+
+.modal-content label {
+  font-family: Georgia, serif;
+  text-align: center; /* Center justify input headers */
+  display: block; /* Ensure labels are block elements */
+  font-size: 1.3rem;
+  font-weight: bold;
+  background: linear-gradient(180deg, rgba(242,242,242,1) 16%, rgba(240,240,240,1) 96%);
+  padding-top: 2px;
+  padding-bottom: 5px;
+  border-top: 1px solid grey;
+  border-left: 1px solid grey;
+  border-right: 1px solid grey;
+  border-bottom: 1px solid #ccc;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  background: #ffffffcf;
+  margin-bottom: 15px;
+  border-top: 0px;
+  border-left: 1px solid grey;
+  border-right: 1px solid grey;
+  border-bottom: 1px solid grey;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.modal-body input, .modal-body select {
+  text-align: center; /* Center the text inside inputs and selects */
+}
+
+#visitReason {
+  height: 100px; /* Adjust this value as needed */
+  margin-top: 0px;
+  resize: vertical; /* Limit the resizing to vertical only */
+}
+
+.appointment-summary {
+  font-size: 1.3rem;
+  padding-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background: white;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 25px;
+  border-bottom: 1px solid #ccc;
+  width: 100% - 50px;
+}
+
+#selectedTime {
+  text-align: center;
+  padding-top: 10px;
+  margin: 0px;
+  margin-bottom: 20.8px;
+}
+
+.modal-content button {
+  font-family: Georgia, serif;
+  font-weight: bold;
+  font-size: 1.4rem;
+  //padding: 10px 15px;
+  //margin-right: 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #fff;
+}
+
+#confirmButton {
+  background: linear-gradient(to bottom, #6ede85, #2bae4b); /* Green gradient */
+}
+
+#confirmButton:hover {
+  background: linear-gradient(to bottom, #54b96a, #239442); /* Darker green gradient */
+}
+
+#cancelButton {
+  background: linear-gradient(to bottom, #f27575, #c0392b); /* Red gradient */
+}
+
+#cancelButton:hover {
+  background: linear-gradient(to bottom, #e05656, #a93226); /* Darker red gradient */
+}
+
+.modal-footer {
+  display: flex;
+  margin-top: 20px;
+}
+
+.modal-footer button {
+  flex: 1; /* Make buttons take equal space */
+  padding: 10px;
+  margin: 0 5px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #ff6347;
+}
+
+.fc-daygrid-day-frame {
+  max-height: 170px; /* Set the maximum height for the day cell */
+  overflow-y: auto;  /* Add a scrollbar when the content exceeds the height */
+}
+
+.fc-daygrid-day-number { /* Day numbers in month view*/
+  font-size: 1.25em;
+}
+
+.fc-event-title:not(.fc-sticky) { /* div of monthly events */
+  text-align: center;
+  background-color: lightblue;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 1.35em;
+}
+
+.fc-event-title-container { /* div of weekly events */
+  background: linear-gradient(178deg, rgba(181,255,169,1) 17%, rgba(189,247,159,1) 36%, rgba(130,255,132,1) 66%, rgba(54,235,101,1) 95%);
+  color: black;
+  font-size: 1.3em;
+  font-family: Tahoma, serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fc-event-title {
+  text-align: center;
+}
+
+.fc-timegrid-event {
+  background-color: white;
+}
+
+.fc-col-header-cell { /* weekday headers */
+  text-align: center;
+  //background-color: black;
+  background: linear-gradient(0deg, rgba(110,110,110,1) 0%, rgba(0,0,0,1) 41%);
+  color: white;
+  font-weight: bold;
+  font-size: 1.4em;
+}
+
+.fc-timegrid-slot-label, .fc-timegrid-slot-label.fc-timegrid-slot-minor { /* y-axis major divs */
+  background-color: rgb(140, 140, 140);
+  color: white;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.fc-timegrid-slot-label.fc-timegrid-slot-minor { /* y-axis minor divs */
+  background-color: rgb(170,170,170);
+}
+
+.fc-daygrid-day-top { /* day headers */
+  text-align: center;
+  background-color: darkblue;
+  color: white;
+  font-weight: bold;
+}
+
+.fc-day-disabled {
+  background-color: grey !important;
+}
+
+.fc-daygrid-event-dot {
+  display: none; /* Hides the dots */
+}
+
+.fc-header-toolbar { /* Title div */
+  padding: 10px 16px 8px 16px;
+  margin: 0px !important;
+  background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 76%, rgba(139,139,139,1) 100%); 
+}
+
+.fc-toolbar-title {
+  font-size: 2.4em !important;
+  font-family: Tahoma, serif;
+  font-weight: bold;
+  background-color: rgba(255,255,255,.5);
+  padding: 5px 12px 6px 12px;
+  border-radius: 3px;
+  border: 1px solid #111;
+}
+
+.fc-today-button {
+  font-size: 1.2em !important;
+  border-radius: 3px !important;
+  padding: 12px 15px 12px 15px !important;
+}
+
+.fc-button-group {
+  font-size: 1.4em !important;
+  border-radius: 3px !important;
+}
+
+.fc-day-disabled {
+    background-color: #a1a1a1 !important;
+}
+
+.fc-col-header-cell.fc-day-disabled {
+    background-color: #777 !important;
+}
+
+.fc-timegrid-axis {
+	background-color: rgb(170,170,170);
+}
