@@ -28,8 +28,6 @@ html, body {
 .modal-header {
   font-family: Georgia, serif;
   font-style: bold;
-  //background-color: #C2C2C2;
-  //background: linear-gradient(to bottom, #d3d3d3 50%, #a9a9a9 100%);
   background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 92%, rgba(139,139,139,1) 100%);
   color: #000;
   padding: 6px;
@@ -131,8 +129,6 @@ html, body {
   font-family: Georgia, serif;
   font-weight: bold;
   font-size: 1.4rem;
-  //padding: 10px 15px;
-  //margin-right: 10px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
@@ -191,7 +187,7 @@ html, body {
 
 .fc-event-title:not(.fc-sticky) { /* div of monthly events */
   text-align: center;
-  background-color: lightblue;
+  background-color: rgb(169, 211, 226);
   padding: 2px 5px;
   border-radius: 3px;
   font-size: 1.35em;
@@ -217,7 +213,6 @@ html, body {
 
 .fc-col-header-cell { /* weekday headers */
   text-align: center;
-  //background-color: black;
   background: linear-gradient(0deg, rgba(110,110,110,1) 0%, rgba(0,0,0,1) 41%);
   color: white;
   font-weight: bold;
@@ -264,6 +259,8 @@ html, body {
   padding: 5px 12px 6px 12px;
   border-radius: 3px;
   border: 1px solid #111;
+  word-break: break-word;
+  text-align: center;
 }
 
 .fc-today-button {

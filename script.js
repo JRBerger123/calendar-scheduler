@@ -467,14 +467,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		monthButton.textContent = 'Month';
 		
 		if (startMonth == endMonth) {
-			toolbarTitle.textContent = `${startMonth} ${getOrdinal(startDate)} – ${getOrdinal(endDate)}, ${year}`;
-		} else {
-			if (year == endYear) {
-				toolbarTitle.textContent = `${startMonth} ${getOrdinal(startDate)} – ${endMonth} ${getOrdinal(endDate)}, ${year}`;
-			} else {
-				toolbarTitle.textContent = `${startMonth} ${getOrdinal(startDate)}, ${year} – ${endMonth} ${getOrdinal(endDate)}, ${endYear}`;
-			}
-		}
+      toolbarTitle.innerHTML = `${startMonth}&nbsp;${getOrdinal(startDate)}&nbsp;<wbr>-</wbr>&nbsp;${getOrdinal(endDate)},&nbsp;${year}`;
+    } else {
+      if (year == endYear) {
+        toolbarTitle.innerHTML = `${startMonth}&nbsp;${getOrdinal(startDate)}&nbsp;<wbr>-</wbr>&nbsp;${endMonth} ${getOrdinal(endDate)},&nbsp;${year}`;
+      } else {
+        toolbarTitle.innerHTML = `${startMonth}&nbsp;${getOrdinal(startDate)},&nbsp;${year}&nbsp;<wbr>-</wbr>&nbsp;${endMonth}&nbsp;${getOrdinal(endDate)},&nbsp;${endYear}`;
+      }
+    }
 		
 		adjustSlotHeight(calendarEl, totalSlots); // Adjusts slot height
 		addEvents(eventManager, calendar);
@@ -505,7 +505,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	  
 		calendar.removeAllEvents();
 		
-		toolbarTitle.textContent = 'Available Times - ' + currentDate.toLocaleString('default', { month: 'short', year: 'numeric' });
+		toolbarTitle.innerHTML = 'Available&nbsp;Times&nbsp;<wbr>-</wbr>&nbsp;' + currentDate.toLocaleString('default', { month: 'short', year: 'numeric' }).replace(" ", "&nbsp;");
 
 		tempEventManager = generateAvailableTimes(startDate, endDate, startingWorkHour, endingWorkHour, slotsPerHour, workingDays, eventManager);
 		tempEventManager = consolidateEvents(tempEventManager);
@@ -529,12 +529,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		monthButton.textContent = 'Month';
 		
 		if (startMonth == endMonth) {
-			toolbarTitle.textContent = `${startMonth} ${getOrdinal(startDate)} – ${getOrdinal(endDate)}, ${year}`;
+			toolbarTitle.innerHTML = `${startMonth}&nbsp;${getOrdinal(startDate)}&nbsp;<wbr>–</wbr>&nbsp;${getOrdinal(endDate)},&nbsp;${year}`;
 		} else {
 			if (year == endYear) {
-				toolbarTitle.textContent = `${startMonth} ${getOrdinal(startDate)} – ${endMonth} ${getOrdinal(endDate)}, ${year}`;
+				toolbarTitle.innerHTML = `${startMonth}&nbsp;${getOrdinal(startDate)}&nbsp;<wbr>–</wbr>&nbsp;${endMonth}&nbsp;${getOrdinal(endDate)},&nbsp;${year}`;
 			} else {
-				toolbarTitle.textContent = `${startMonth} ${getOrdinal(startDate)}, ${year} – ${endMonth} ${getOrdinal(endDate)}, ${endYear}`;
+				toolbarTitle.innerHTML = `${startMonth}&nbsp;${getOrdinal(startDate)}, ${year}&nbsp;<wbr>–</wbr>&nbsp;${endMonth}&nbsp;${getOrdinal(endDate)},&nbsp;${endYear}`;
 			}
 		}
 		adjustSlotHeight(calendarEl, totalSlots);
