@@ -30,7 +30,7 @@ html, body {
   font-style: bold;
   background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 92%, rgba(139,139,139,1) 100%);
   color: #000;
-  padding: 6px;
+  padding: 10px 6px;
   border-bottom: 2px solid black;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   border-top-left-radius: 10px; /* Rounded corners for the top-left */
@@ -256,7 +256,7 @@ html, body {
   font-family: Tahoma, serif;
   font-weight: bold;
   background-color: rgba(255,255,255,.5);
-  padding: 5px 12px 6px 12px;
+  padding: 10px 14px 12px 14px;
   border-radius: 3px;
   border: 1px solid #111;
   word-break: break-word;

@@ -376,17 +376,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'timeGridWeek',
-	
-	dateClick: function(info) {
-	  // Change view to week view of clicked day on month view
-	  // *Currently not working on current month of month view
-      const clickedDate = new Date(info.date); // The clicked date
-      const currentViewType = calendar.view.type;
-	  
-	  if (currentViewType == 'dayGridMonth'){
-		//console.log("Date clicked:", info.dateStr); // Verify the callback is triggered
-		calendar.changeView('timeGridWeek', info.date); // Change to week view of clicked day
-	  }
+
+    dayCellDidMount: function(info) {
+      // Change view to week view of clicked day on month view
+      if (info.date.getMonth() === calendar.getDate().getMonth()) {
+        info.el.addEventListener('click', function() {
+          const clickedDate = new Date(info.date);
+          const currentViewType = calendar.view.type;
+  
+          if (currentViewType == 'dayGridMonth') {
+            //console.log("Date clicked:", info.dateStr);
+            calendar.changeView('timeGridWeek', info.date);
+          }
+        });
+      }
     },
 
     validRange: {
