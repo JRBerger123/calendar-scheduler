@@ -544,6 +544,32 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		addEvents(eventManager, calendar)
 	  }
+
+    // Place the profile image in the header toolbar
+    const headerToolbar = document.querySelector('.fc-header-toolbar');
+    const calendarLogo = document.getElementById('calendar-logo');
+    if (headerToolbar && calendarLogo) {
+      calendarLogo.style.display = 'flex  '; // Ensure the image is displayed
+      headerToolbar.insertBefore(calendarLogo, headerToolbar.firstChild);
+    }
+
+    // Move the left-right buttons to the right of the title div
+    const buttonGroups = document.querySelectorAll('.fc-button-group');
+    const toolbarChunks = document.querySelectorAll('.fc-toolbar-chunk');
+    const titleDiv = document.querySelector('.fc-toolbar-title');
+    if (toolbarChunks.length > 1 && buttonGroups[0] && titleDiv) {
+      toolbarChunks[1].insertBefore(buttonGroups[0], titleDiv.nextSibling);
+    }
+
+    // Move the today button to the left of the week and month buttons
+    if (buttonGroups.length > 1) {
+      const correctButtonGroup = buttonGroups[1]; // Assuming the second button group is the correct one
+      if (correctButtonGroup && titleButton) {
+        correctButtonGroup.insertBefore(titleButton, correctButtonGroup.firstChild);
+      }
+      // Add a class to the toolbar chunk containing the buttons
+      correctButtonGroup.closest('.fc-toolbar-chunk').classList.add('view-toolbar-chunk');
+    }
 	  
 	  //calendar.render(); // Trigger a render update if needed
 	  

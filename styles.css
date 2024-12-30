@@ -1,4 +1,4 @@
-html, body {
+toolbarhtml, body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -6,6 +6,71 @@ html, body {
 
 #calendar {
   height: 100vh; /* Use the full viewport height */
+}
+
+.fc-header-toolbar { /* Title div */
+  padding-bottom: 1px;
+  margin: 0px !important;
+  background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 58%, rgba(147,145,145,1) 85%, rgb(122, 122, 122) 100%);
+}
+
+.fc-toolbar-chunk {
+  display: flex;
+  align-items: center;
+}
+
+.fc-toolbar-title {
+  flex-grow: 1;
+  font-size: 2.5em !important;
+  font-family: Tahoma, serif;
+  font-weight: bold;
+  background-color: rgba(255,255,255,.5);
+  margin-top: 8px !important;
+  padding: 14px 18px 16px 18px;
+  border-radius: 3px;
+  border: 1px solid #111;
+  word-break: break-word;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Adds a shadow around the title */
+}
+
+.view-toolbar-chunk {
+  margin: 10px 20px 10px 30px;
+  font-size: 1.2em;
+}
+
+#calendar-logo {
+  display: none;
+  background: linear-gradient(90deg, rgba(117,113,113,1) 0%, rgba(156,155,155,0.7301121132046569) 61%, rgba(169,169,169,0) 100%);
+  align-items: center;
+  padding: 10px 30px 10px 20px;
+  font-size: 1.3em;
+}
+
+#professor-name {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+#calendar-logo p {
+  margin: 5px 0px;
+}
+
+#profile-image {
+  width: 100px; 
+  height: 100px;
+  border-radius: 50%; 
+  z-index: 10; 
+  border: 2px solid #333; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
+}
+
+#div-professor-info {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .modal {
@@ -243,30 +308,6 @@ html, body {
 
 .fc-daygrid-event-dot {
   display: none; /* Hides the dots */
-}
-
-.fc-header-toolbar { /* Title div */
-  padding: 10px 16px 8px 16px;
-  margin: 0px !important;
-  background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 76%, rgba(139,139,139,1) 100%); 
-}
-
-.fc-toolbar-title {
-  font-size: 2.4em !important;
-  font-family: Tahoma, serif;
-  font-weight: bold;
-  background-color: rgba(255,255,255,.5);
-  padding: 10px 14px 12px 14px;
-  border-radius: 3px;
-  border: 1px solid #111;
-  word-break: break-word;
-  text-align: center;
-}
-
-.fc-today-button {
-  font-size: 1.2em !important;
-  border-radius: 3px !important;
-  padding: 12px 15px 12px 15px !important;
 }
 
 .fc-button-group {
