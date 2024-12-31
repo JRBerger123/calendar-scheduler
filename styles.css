@@ -227,18 +227,41 @@ toolbarhtml, body {
   margin: 0 5px;
 }
 
-.close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-  cursor: pointer;
+/* Profile Modal Styles */
+#profileModal .modal-content {
+  width: 50%;
+  max-width: 400px;
 }
 
-.close:hover {
-  color: #ff6347;
+#profile-info {
+  text-align: center;
+}
+
+#profile-image-modal {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+#profileModal .modal-footer {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+#profileModal .modal-footer button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background: linear-gradient(to bottom, #9e9e9e, #707070); /* Gradient from lighter grey to darker grey */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+}
+
+#profileModal .modal-footer button:hover {
+  background: linear-gradient(to bottom, #a0a0a0, #333333); /* Gradient from darker grey to even darker grey */
 }
 
 .fc-daygrid-day-frame {

@@ -11,17 +11,21 @@ Done: Adjust Title Text to be easier to read
 Done: Press Esc exits modal
 Done: Adjust Month View day heights based on window size
 Done: Make unselectable more obvious
+Done: Fix text-wrap on title
+Done: Create an offset from current time to schedule new appointments
+Done: Clicking the day on Month View sends you to week mode of that day
+Done: Pressing Enter on Modal GUI submits form
 
-Clicking the day on Month View sends you to week mode of that day
-	- Doesn't work on current month in month view
-Create an offset from current time to schedule new appointments
 Make days with no Available timeslots unselectable in Month View
 Create animation for showing part of Modal GUI not being filled out
 Create timer that greys out event and makes it unselectable after timer expires (upload event to server)
 Make mobile friendly
 Create Login for Faculty Settings
-Fix text-wrap on title
 Fix Available timeslots not using the entire day div
+Unselectable timeslots are not greyed out
+  - Timeslots are not individual elements, but are part of a row and column div
+Create Profile Modal
+Title is not centered
 */
 
 
@@ -261,14 +265,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const totalHours = endingWorkHour - startingWorkHour;
   const totalSlots = totalHours * slotsPerHour;
   const slotHeight = 100 / totalSlots + "vh";
+  const unselectableTimeWindow = 60; // Time window in minutes within which timeslots are unselectable
   let lastViewType = null;  // Variable to track the last view type
 
   const calendarEl = document.getElementById('calendar');
   const modal = document.getElementById('appointmentModal');
-  const closeModal = document.getElementById('closeModal');
   const confirmButton = document.getElementById('confirmButton');
   const cancelButton = document.getElementById('cancelButton');
   const selectedTime = document.getElementById('selectedTime');
+  const profileModal = document.getElementById('profileModal');
+  const closeProfileModal = document.getElementById('closeProfileModal');
+  const calendarLogo = document.getElementById('calendar-logo');
 
   let selectedInfo;
   
@@ -577,35 +584,31 @@ document.addEventListener('DOMContentLoaded', function() {
 	},
 	
 	eventDidMount: function(info) {
-		console.log("Render Detected")
-		//console.log("eventDidMount triggered for", info.event);
 		const currentViewType = info.view.type;
-		if (currentViewType == 'dayGridMonth') {
+    const now = new Date();
+    const timeDifference = (info.event.start - now) / (1000 * 60); // Time difference in minutes
+
+		if (currentViewType == 'dayGridMonth') { // Removes rows of unavailable days in Month View
 			const table = document.querySelector('.fc-scrollgrid-sync-table');
 			const rows = table.querySelectorAll('tr[role="row"]');
-
 			for (let index = rows.length - 1; index >= 0; index--) {
 			  const row = rows[index];
-			  
-			  //console.log("Processing Row:", row);
 			  const cells = row.querySelectorAll('td');
-
 			  if (cells.length === 0) {
-				//console.log("No cells found in this row, skipping.");
 				return;
 			  }
-
 			  const allDisabled = Array.from(cells).every(cell => cell.classList.contains('fc-day-disabled'));
-			  //console.log("All cells disabled:", allDisabled);
-
 			  if (allDisabled) {
-				//console.log("Removing row:", row);
-				//table.deleteRow(index);
 				row.style.display = 'none';
-				//console.log(table.rows);
 			  }
 			};
-		}
+		} else {
+      if (timeDifference < unselectableTimeWindow) {
+        console.log('Event is in the past:', info.event.title);
+        info.el.style.backgroundColor = 'grey';
+        info.el.style.pointerEvents = 'none'; // Make it unselectable
+      }
+    }
 	},
 
     selectable: true,
@@ -626,10 +629,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     selectAllow: function(selectInfo) {
       const duration = (selectInfo.end - selectInfo.start) / (1000 * 60);
+      const now = new Date();
+      const timeDifference = (selectInfo.start - now) / (1000 * 60); // Time difference in minutes
+
       return (
         selectInfo.start.getHours() >= startingWorkHour &&
         selectInfo.end.getHours() <= endingWorkHour &&
-        (duration === 30 || duration === 60)
+        (duration === 30 || duration === 60) &&
+        timeDifference >= unselectableTimeWindow
       );
     },
 
@@ -656,48 +663,74 @@ document.addEventListener('DOMContentLoaded', function() {
     const visitCategory = document.getElementById('visitCategory').value;
     const visitReason = document.getElementById('visitReason').value;
 
-    if (fullName && email && visitCategory) {
-	  const event = new Event(
-	    dateToHour(new Date(selectedInfo.startStr).getHours(), new Date(selectedInfo.startStr).getMinutes()),
-	    dateToHour(new Date(selectedInfo.endStr).getHours(), new Date(selectedInfo.endStr).getMinutes()),
-	    `${formatDate(new Date(selectedInfo.startStr))}`,
-		`${visitCategory} Meeting for ${capitalizeWords(fullName)}`,
-		fullName,
-		email,
-		visitCategory,
-		visitReason
-	  );
-	  
-	  eventManager.addEvent(event);
-	  
-	  //console.log("Added Event:", event);
-		
-      calendar.addEvent({
-	      title: event.title || "No Title",
-	      start: dateTime(event.date, event.startTime),
-	      end: dateTime(event.date, event.endTime),     
-	      description: event.reasonForVisit, // Optional additional fields
-	      extendedProps: {
-		    professor: event.professor,
-		    category: event.meetingCategory,
-		    fullName: event.fullName,
-	  	    email: event.email
-	      }
-	  });
-	
-      modal.style.display = "none";
-    } else {
-      alert("Please fill in all fields.");
+    function submitForm() {
+        if (fullName && email && visitCategory) {
+            const event = new Event(
+                dateToHour(new Date(selectedInfo.startStr).getHours(), new Date(selectedInfo.startStr).getMinutes()),
+                dateToHour(new Date(selectedInfo.endStr).getHours(), new Date(selectedInfo.endStr).getMinutes()),
+                `${formatDate(new Date(selectedInfo.startStr))}`,
+                `${visitCategory} Meeting for ${capitalizeWords(fullName)}`,
+                fullName,
+                email,
+                visitCategory,
+                visitReason
+            );
+
+            eventManager.addEvent(event);
+
+            calendar.addEvent({
+                title: event.title || "No Title",
+                start: dateTime(event.date, event.startTime),
+                end: dateTime(event.date, event.endTime),
+                description: event.reasonForVisit, // Optional additional fields
+                extendedProps: {
+                    professor: event.professor,
+                    category: event.meetingCategory,
+                    fullName: event.fullName,
+                    email: event.email
+                }
+            });
+
+            modal.style.display = "none";
+        } else {
+            alert("Please fill in all fields.");
+        }
     }
-  };
+
+    submitForm();
+};
+
+// Add event listener for Enter key on modal
+modal.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && modal.style.display !== 'none') {
+        confirmButton.onclick();
+    }
+});
+
+// Add event listener for Enter key on document
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && modal.style.display !== 'none') {
+        confirmButton.onclick();
+    }
+});
+
+// Show profile modal when calendar logo is clicked
+calendarLogo.onclick = function() {
+  profileModal.style.display = "block";
+};
+
+// Close profile modal when the close button is clicked
+closeProfileModal.onclick = function() {
+  profileModal.style.display = "none";
+};
   
   // Listen for keydown events
   document.addEventListener('keydown', function(event) {
-    // Check if the pressed key is the Escape key (key code 27)
+    // Close modal with Escape key
     if (event.key === 'Escape') {
-      // Close the modal
       modal.style.display = 'none';
     } else if (event.key === 'ArrowLeft') {
+      // Navigate to the next or previous view based on arrow keys
 		navigateView(-1, calendar.view.type);
 	} else if (event.key === 'ArrowRight') {
 		navigateView(1, calendar.view.type);
@@ -705,9 +738,24 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   window.onclick = function(event) {
+    // Close the modal if the user clicks outside of it
     if (event.target == modal) {
       modal.style.display = "none";
+    } else if (event.target == profileModal) {
+      profileModal.style.display = "none";
     }
+  };
+
+  // Handle Profile Settings button click
+  profileSettingsButton.onclick = function() {
+    alert("Profile Settings clicked");
+    // Add your logic here
+  };
+
+  // Handle Settings button click
+  settingsButton.onclick = function() {
+    alert("Settings clicked");
+    // Add your logic here
   };
 });
 
