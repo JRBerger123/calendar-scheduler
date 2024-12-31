@@ -15,6 +15,8 @@ Done: Fix text-wrap on title
 Done: Create an offset from current time to schedule new appointments
 Done: Clicking the day on Month View sends you to week mode of that day
 Done: Pressing Enter on Modal GUI submits form
+Done: Create Profile Modal
+Done: Fixed error in resizing calendar when window is resized vertically
 
 Make days with no Available timeslots unselectable in Month View
 Create animation for showing part of Modal GUI not being filled out
@@ -24,7 +26,6 @@ Create Login for Faculty Settings
 Fix Available timeslots not using the entire day div
 Unselectable timeslots are not greyed out
   - Timeslots are not individual elements, but are part of a row and column div
-Create Profile Modal
 Title is not centered
 */
 
@@ -69,11 +70,12 @@ class EventManager {
   }
 }
 
-function adjustSlotHeight(calendarEl, totalSlots) { // Function to dynamically adjust slot height
+function adjustSlotHeight(calendarEl, totalSlots) {
   const timeGridSlots = calendarEl.querySelector('.fc-timegrid-slots');
   const headerToolbar = calendarEl.querySelector('.fc-header-toolbar');
-  
-  if (!timeGridSlots || !headerToolbar) return; // Ensure both elements exist
+  const dayHeader = calendarEl.querySelector('.fc-col-header');
+
+  if (!timeGridSlots || !headerToolbar || !dayHeader) return; // Ensure all elements exist
 
   // Get the full header height including padding and margin
   const headerStyles = window.getComputedStyle(headerToolbar);
@@ -83,22 +85,23 @@ function adjustSlotHeight(calendarEl, totalSlots) { // Function to dynamically a
     + parseInt(headerStyles.paddingTop)
     + parseInt(headerStyles.paddingBottom);  // Include margins and padding
 
-  const availableHeight = calendarEl.offsetHeight;  // Full available height of the calendar
-  const dayHeaderHeight = 25;
-  const totalSlotHeight = availableHeight - headerHeight - dayHeaderHeight;  // Subtract header height from available space
-  const timeSlots = calendarEl.querySelectorAll('.fc-timegrid-slot')
+  // Get the day header height
+  const dayHeaderHeight = dayHeader.offsetHeight;
+
+  // Calculate the available height for the slots
+  const availableHeight = calendarEl.offsetHeight - headerHeight - dayHeaderHeight - 1;
 
   if (totalSlots > 0) {
-    const slotHeight = totalSlotHeight / totalSlots;  // Divide remaining height by number of slots
-	//console.log(`Available height: ${availableHeight}, Header height: ${headerHeight}, Slot height: ${slotHeight}`);
+    const slotHeight = availableHeight / totalSlots;  // Divide remaining height by number of slots
 
+    // Adjust the height of each time slot
+    const timeSlots = calendarEl.querySelectorAll('.fc-timegrid-slot');
     timeSlots.forEach(slot => {
       slot.style.height = `${slotHeight}px`;
     });
-	
-	 // Adjust the events' height and position based on slot time
-    const events = calendarEl.querySelectorAll('.fc-event'); // Grab all the events
 
+    // Adjust the events' height and position based on slot time
+    const events = calendarEl.querySelectorAll('.fc-event'); // Grab all the events
     events.forEach(eventElement => {
       // Use FullCalendar's method to get the event object
       const event = eventElement._fci; // FullCalendar internally attaches event object via _fci
@@ -120,11 +123,11 @@ function adjustSlotHeight(calendarEl, totalSlots) { // Function to dynamically a
         const eventHeight = eventDuration * slotHeight;
 
         // Set the event's position and height
-        eventElement.style.top = `${eventTop}px`;
-        eventElement.style.height = `${eventHeight}px`;
-		eventElement.offsetHeight; // Trigger a reflow
-		
-	    console.log(`Event start: ${eventStart}, Event end: ${eventEnd}, Event height: ${eventHeight}, Event top: ${eventTop}`)
+        eventElement.style.top = `${Math.round(eventTop)}px`;
+        eventElement.style.height = `${Math.round(eventHeight)}px`;
+        eventElement.offsetHeight; // Trigger a reflow
+
+        //console.log(`Event start: ${eventStartTime}, Event end: ${eventEndTime}, Event height: ${eventHeight}, Event top: ${eventTop}`);
       }
     });
   }
@@ -272,7 +275,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const modal = document.getElementById('appointmentModal');
   const confirmButton = document.getElementById('confirmButton');
   const cancelButton = document.getElementById('cancelButton');
-  const selectedTime = document.getElementById('selectedTime');
   const profileModal = document.getElementById('profileModal');
   const closeProfileModal = document.getElementById('closeProfileModal');
   const calendarLogo = document.getElementById('calendar-logo');
@@ -381,6 +383,48 @@ document.addEventListener('DOMContentLoaded', function() {
     calendar.gotoDate(newDate);
   }
 
+  function setupToolbar(isInitialView) {
+
+    if (isInitialView) { // initial view
+      const buttonGroups = document.querySelectorAll('.fc-button-group');
+      const toolbarChunks = document.querySelectorAll('.fc-toolbar-chunk');
+
+      buttonGroups[0].id = ('button-group-left-right');
+      buttonGroups[1].id = ('button-group-view-mode');
+      toolbarChunks[0].id = ('toolbar-chunk-left-right');
+      toolbarChunks[1].id = ('toolbar-chunk-title');
+      toolbarChunks[2].id = ('toolbar-chunk-view-mode');
+    }
+
+    // Place the profile image in the header toolbar
+    const headerToolbar = document.querySelector('.fc-header-toolbar');
+    const calendarLogo = document.getElementById('calendar-logo');
+    if (headerToolbar && calendarLogo) {
+      calendarLogo.style.display = 'flex'; // Ensure the image is displayed
+      headerToolbar.insertBefore(calendarLogo, headerToolbar.firstChild);
+      calendarLogo.classList.add('fc-toolbar-chunk');
+    }
+
+    // Move the today button to the left of the week and month buttons
+    const todayWeekMonthButtonGroup = document.getElementById('button-group-view-mode');
+    const titleButton = document.querySelector('.fc-today-button');
+    if (todayWeekMonthButtonGroup && titleButton) {
+      todayWeekMonthButtonGroup.insertBefore(titleButton, todayWeekMonthButtonGroup.firstChild);
+    }
+    
+    // Move the left-right buttons to the left of the today, week, and month buttons
+    const leftRightButtons = document.getElementById('button-group-left-right');
+    const toolbarChunkViewMode = document.getElementById('toolbar-chunk-view-mode');
+    if (leftRightButtons && toolbarChunkViewMode) {
+      toolbarChunkViewMode.insertBefore(leftRightButtons, todayWeekMonthButtonGroup);
+    }
+
+    if (isInitialView) { // initial view
+      const toolbarChunkLeftRight = document.getElementById('toolbar-chunk-left-right');
+      toolbarChunkLeftRight.remove();
+    }
+  }
+
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'timeGridWeek',
 
@@ -388,7 +432,6 @@ document.addEventListener('DOMContentLoaded', function() {
       // Change view to week view of clicked day on month view
       if (info.date.getMonth() === calendar.getDate().getMonth()) {
         info.el.addEventListener('click', function() {
-          const clickedDate = new Date(info.date);
           const currentViewType = calendar.view.type;
   
           if (currentViewType == 'dayGridMonth') {
@@ -424,7 +467,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 	
 	datesSet: function(dateInfo) {
-	  console.log("Date Change Detected");
+	  //console.log("Date Change Detected");
 	  // Get the current view from FullCalendar
 	  const currentViewType = dateInfo.view.type;
 	  const view = calendar.view;
@@ -437,13 +480,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	  firstDay.setDate(firstDay.getDate() + 1);
 	  lastDay.setDate(lastDay.getDate() - 2);
 
-	  // Format the dates in the desired format (e.g., Dec 9th – 13th, 2024)
-	  const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
-
-	  // Format the first and last days
-	  const formattedFirstDay = firstDay.toLocaleDateString('en-US', options);
-	  const formattedLastDay = lastDay.toLocaleDateString('en-US', options);
-
 	  // Format the date range for the title
 	  const startDate = firstDay.getDate();
 	  const endDate = lastDay.getDate();
@@ -452,18 +488,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	  const year = firstDay.getFullYear();
 	  const endYear = lastDay.getFullYear();
 	  
-	  //console.log("Start Year: ", year, " End Year: ", endYear);
-	  
 	  const daysVisible = (endDate.valueOf() - startDate.valueOf()) / (1000 * 60 * 60 * 24);
 	  const toolbarTitle = document.querySelector('.fc-toolbar-title');
-	  const titleButton = document.querySelector('.fc-today-button');
+	  const todayButton = document.querySelector('.fc-today-button');
 	  const weekButton = document.querySelector('.fc-timeGridWeek-button');
 	  const monthButton = document.querySelector('.fc-dayGridMonth-button');
 	  
 	  var tempEventManager = new EventManager();
-	  
-	  //console.log(`${daysVisible}`);
-	  //console.log(`Last View: ${lastViewType}, Current View: ${currentViewType}`);
 	  
 	  if (lastViewType == null) { // Initial View
 		// Variables
@@ -471,10 +502,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		//console.log("Initial View Loaded");
 		//console.log("Initial Events:", eventManager.getEvents());
-		
-		titleButton.textContent = 'Today';
-		weekButton.textContent = 'Week';
-		monthButton.textContent = 'Month';
 		
 		if (startMonth == endMonth) {
       toolbarTitle.innerHTML = `${startMonth}&nbsp;${getOrdinal(startDate)}&nbsp;<wbr>-</wbr>&nbsp;${getOrdinal(endDate)},&nbsp;${year}`;
@@ -486,7 +513,8 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 		
-		adjustSlotHeight(calendarEl, totalSlots); // Adjusts slot height
+    setupToolbar(true);
+		adjustSlotHeight(calendarEl, totalSlots);
 		addEvents(eventManager, calendar);
 		
 	  } else if ((lastViewType == 'timeGridWeek' && currentViewType == 'dayGridMonth') || // Week -> Month View
@@ -496,10 +524,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		const currentDate = calendar.getDate(); // Get the current date displayed on the calendar
 		const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0); // Last day of the current month
 		let startDate;
-		
-		titleButton.textContent = 'Today';
-		weekButton.textContent = 'Week';
-		monthButton.textContent = 'Month';
 		
 		if (today > currentDate) { // Calculates first day of month by whether the month has started yet
 			startDate = today;
@@ -519,6 +543,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		tempEventManager = generateAvailableTimes(startDate, endDate, startingWorkHour, endingWorkHour, slotsPerHour, workingDays, eventManager);
 		tempEventManager = consolidateEvents(tempEventManager);
+
+    setupToolbar(false); // Setup the toolbar
 		addEvents(tempEventManager, calendar);
 		
 		
@@ -527,16 +553,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 	  } else if ((lastViewType == 'dayGridMonth' && currentViewType == 'timeGridWeek') || // Month -> Week View
 				(lastViewType == 'timeGridWeek' && currentViewType == 'timeGridWeek')){ // Week -> Week View
+
 		// Variables
 		lastViewType = currentViewType;
 		
 		//console.log("Week View Loaded");
 		
 		calendar.removeAllEvents();
-		
-		titleButton.textContent = 'Today';
-		weekButton.textContent = 'Week';
-		monthButton.textContent = 'Month';
 		
 		if (startMonth == endMonth) {
 			toolbarTitle.innerHTML = `${startMonth}&nbsp;${getOrdinal(startDate)}&nbsp;<wbr>–</wbr>&nbsp;${getOrdinal(endDate)},&nbsp;${year}`;
@@ -547,38 +570,15 @@ document.addEventListener('DOMContentLoaded', function() {
 				toolbarTitle.innerHTML = `${startMonth}&nbsp;${getOrdinal(startDate)}, ${year}&nbsp;<wbr>–</wbr>&nbsp;${endMonth}&nbsp;${getOrdinal(endDate)},&nbsp;${endYear}`;
 			}
 		}
+
+    setupToolbar(false);
 		adjustSlotHeight(calendarEl, totalSlots);
-		
 		addEvents(eventManager, calendar)
 	  }
 
-    // Place the profile image in the header toolbar
-    const headerToolbar = document.querySelector('.fc-header-toolbar');
-    const calendarLogo = document.getElementById('calendar-logo');
-    if (headerToolbar && calendarLogo) {
-      calendarLogo.style.display = 'flex  '; // Ensure the image is displayed
-      headerToolbar.insertBefore(calendarLogo, headerToolbar.firstChild);
-    }
-
-    // Move the left-right buttons to the right of the title div
-    const buttonGroups = document.querySelectorAll('.fc-button-group');
-    const toolbarChunks = document.querySelectorAll('.fc-toolbar-chunk');
-    const titleDiv = document.querySelector('.fc-toolbar-title');
-    if (toolbarChunks.length > 1 && buttonGroups[0] && titleDiv) {
-      toolbarChunks[1].insertBefore(buttonGroups[0], titleDiv.nextSibling);
-    }
-
-    // Move the today button to the left of the week and month buttons
-    if (buttonGroups.length > 1) {
-      const correctButtonGroup = buttonGroups[1]; // Assuming the second button group is the correct one
-      if (correctButtonGroup && titleButton) {
-        correctButtonGroup.insertBefore(titleButton, correctButtonGroup.firstChild);
-      }
-      // Add a class to the toolbar chunk containing the buttons
-      correctButtonGroup.closest('.fc-toolbar-chunk').classList.add('view-toolbar-chunk');
-    }
-	  
-	  //calendar.render(); // Trigger a render update if needed
+    todayButton.textContent = 'Today';
+		weekButton.textContent = 'Week';
+		monthButton.textContent = 'Month';
 	  
 	  events: tempEventManager.getEvents(); // Use formatted events
 	},
@@ -604,9 +604,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			};
 		} else {
       if (timeDifference < unselectableTimeWindow) {
-        console.log('Event is in the past:', info.event.title);
-        info.el.style.backgroundColor = 'grey';
-        info.el.style.pointerEvents = 'none'; // Make it unselectable
+        info.el.style.pointerEvents = 'none'; // Makes timeslot unselectable
       }
     }
 	},
@@ -650,7 +648,18 @@ document.addEventListener('DOMContentLoaded', function() {
   calendar.render();
 
   window.addEventListener('resize', () => { // Dynamically sizes calendar when Window is resized
-    requestAnimationFrame(() => adjustSlotHeight(calendarEl, totalSlots));
+    requestAnimationFrame(() => {
+      adjustSlotHeight(calendarEl, totalSlots);
+  
+      // Reload the view to force a re-render
+      // This was necessary to fix the issue where the calendar would not resize properly when the window was resized vertically
+      calendar.changeView(calendar.view.type);
+    });
+  });
+
+  // Add event listener for orientation change to adjust slot height
+  window.addEventListener('orientationchange', () => {
+    adjustSlotHeight(calendarEl, totalSlots);
   });
 
   cancelButton.onclick = function() {

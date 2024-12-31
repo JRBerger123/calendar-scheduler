@@ -34,17 +34,19 @@ toolbarhtml, body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Adds a shadow around the title */
 }
 
-.view-toolbar-chunk {
-  margin: 10px 20px 10px 30px;
+#toolbar-chunk-view-mode {
+  margin: 20px 20px 10px 0px;
   font-size: 1.2em;
 }
 
 #calendar-logo {
   display: none;
-  background: linear-gradient(90deg, rgba(117,113,113,1) 0%, rgba(156,155,155,0.7301121132046569) 61%, rgba(169,169,169,0) 100%);
+  /*background: linear-gradient(90deg, rgba(117,113,113,1) 0%, rgba(156,155,155,0.7301121132046569) 61%, rgba(169,169,169,0) 100%);*/
+  background: linear-gradient(to right, #f0f0f0, transparent);
   align-items: center;
   padding: 10px 30px 10px 20px;
   font-size: 1.3em;
+  padding-right: 0px;
 }
 
 #professor-name {
@@ -56,13 +58,16 @@ toolbarhtml, body {
   margin: 5px 0px;
 }
 
+#div-profile-image {
+  z-index: 10;
+}
+
 #profile-image {
   width: 100px; 
   height: 100px;
-  border-radius: 50%; 
-  z-index: 10; 
+  border-radius: 50%;
   border: 2px solid #333; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 #div-professor-info {
@@ -71,6 +76,11 @@ toolbarhtml, body {
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
+  background-color: rgba(255,255,255,.5);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  padding: 4px 8px 4px 63.6px;
+  position: relative;
+  left: -63.6px;
 }
 
 .modal {
