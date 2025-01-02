@@ -228,7 +228,7 @@ export function generateAvailableTimes(startDate, endDate, startHour, endHour, s
     const currentYear = startDate.getFullYear();
     const currentMonth = startDate.getMonth();
 
-    const oppositeEventManager = new calendarFunctions.EventManager();
+    const oppositeEventManager = new EventManager();
     let timeIncrement = Math.floor(60 / slotsPerHour);
 
     let start = new Date(currentYear, currentMonth, startDate.getDate());

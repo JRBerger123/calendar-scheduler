@@ -1,3 +1,46 @@
+:root {
+  /* Color Variables */
+    /* Header variables */
+    --selected-date-color: #1f1e1e;
+    --selected-date-background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(230, 230, 230, 0.9));
+    --header-background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 58%, rgba(147,145,145,1) 85%, rgb(122, 122, 122) 100%);
+    
+    /* Both Views */
+    --disabled-day-background: grey;
+    --column-header-background: linear-gradient(0deg, rgba(85,85,85) 0%, rgb(45, 45, 45) 41%);
+
+    /* Month View */
+    --month-view-day-header-background: linear-gradient(to bottom, #b0b0b0 12%, #949494 40%, #6d6d6d 80%, #5a5a5a 94%, #5a5a5a 100%);
+    --month-view-event-background: #d4e1f5;
+
+    /* Week View */
+    --week-view-event-background: linear-gradient(178deg, rgba(181,255,169,1) 17%, rgba(189,247,159,1) 36%, rgba(130,255,132,1) 66%, rgba(54,235,101,1) 95%);
+    --disabled-day-header-background: rgb(128, 128, 128);
+    --timegrid-axis-minor-background: rgb(170,170,170);
+    --timegrid-axis-major-background: rgb(128, 128, 128);
+
+    /* Modal Variables */
+    --modal-background: rgba(0, 0, 0, 0.4);
+    --modal-header-background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 92%, rgba(139,139,139,1) 100%);
+    --modal-footer-background: linear-gradient(to bottom, #9e9e9e, #707070);
+    --modal-footer-background-hover: linear-gradient(to bottom, #a0a0a0, #333333);
+    --confirm-button-color: linear-gradient(to bottom, #6ede85, #2bae4b);
+    --confirm-button-hover-color: linear-gradient(to bottom, #54b96a, #239442);
+    --cancel-button-color: linear-gradient(to bottom, #f27575, #c0392b);;
+    --cancel-button-hover-color: linear-gradient(to bottom, #e05656, #a93226);;
+    --modal-content-background: #fff;
+
+    /* Flash red variables */
+    --flash-red-start: #ffcccc;
+    --flash-red-middle: #ff6666;
+    --flash-red-end: #ffcccc;
+
+  /* Spacing Variables */
+    /* Toolbar variables */
+    --header-toolbar-bottom-margin: .7em;
+    --header-toolbar-top-margin: 1.5em;
+}
+
 /* General styles */
 html, body { height: 100%; margin: 0; padding: 0; }
 
@@ -8,27 +51,40 @@ html, body { height: 100%; margin: 0; padding: 0; }
 .fc-header-toolbar { 
   padding-bottom: 0.0625em; 
   margin: 0em !important; 
-  background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 58%, rgba(147,145,145,1) 85%, rgb(122, 122, 122) 100%);
+  background: var(--header-background);
 }
 
 /* Toolbar chunk title */
-#toolbar-chunk-title { margin: 1em 2em 0.5em 2em !important; justify-content: center; }
+#toolbar-chunk-title {
+  height: calc(100% - var(--header-toolbar-top-margin) - var(--header-toolbar-bottom-margin));
+  margin: var(--header-toolbar-top-margin) 2em var(--header-toolbar-bottom-margin) 2em !important;
+  justify-content: center; 
+}
+
+#toolbar-chunk-title h2 {
+  display: flex;
+  align-items: center;
+  font-weight: 1000; 
+  font-size: 2.5em !important;
+}
 
 /* Toolbar title */
 .fc-toolbar-title {
+  height: 100%;
   flex-grow: 1; 
-  font-size: 2.5em !important; 
-  font-family: Tahoma, serif; 
-  font-weight: bold; 
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(230, 230, 230, 0.9)); 
-  padding: 0.6em 1.2em; 
+  font-family: Tahoma, serif;
+  background: var(--selected-date-background);
+  padding: 0 1.2em; 
   border-radius: 0.2em; 
   word-break: break-word; 
   text-align: center; 
-  box-shadow: inset 0 0.1em 0.2em rgba(255, 255, 255, 0.7), inset -0.1em -0.1em 0.2em rgba(0, 0, 0, 0.2), inset 0.1em -0.1em 0.2em rgba(0, 0, 0, 0.2), inset 0 -0.1em 0.2em rgba(0, 0, 0, 0.2), 0 0.5em 1em rgba(0, 0, 0, 0.3); 
-  color: #1f1e1e; 
+  box-shadow: inset 0 0.2em 0.4em rgba(255, 255, 255, 0.7), 
+            inset -0.2em -0.2em 0.4em rgba(0, 0, 0, 0.2), 
+            inset 0.2em -0.2em 0.4em rgba(0, 0, 0, 0.2), 
+            inset 0 -0.2em 0.4em rgba(0, 0, 0, 0.2), 
+            0 0.5em .5em rgba(0, 0, 0, 0.4);
+  color: var(--selected-date-color);
   text-shadow: 0 0.02em 0.8em rgba(179, 169, 169, 0.5); 
-  position: relative; 
   overflow: hidden;
 }
 
@@ -47,11 +103,11 @@ html, body { height: 100%; margin: 0; padding: 0; }
 
 /* Toolbar chunk view mode */
 #toolbar-chunk-view-mode {
-  margin: 1em 2em 0.5em 0; 
+  margin: var(--header-toolbar-top-margin) 2em var(--header-toolbar-bottom-margin) 0; 
   font-size: 1.2em; 
   flex-direction: column; 
   align-items: center; 
-  height: calc(100% - 1.5em); 
+  height: calc(100% - var(--header-toolbar-top-margin) - var(--header-toolbar-bottom-margin)); 
   box-shadow: inset 0 0.2em 0.4em rgba(0, 0, 0, 0.5); 
   overflow: hidden; 
   padding: 0.3em; 
@@ -59,10 +115,10 @@ html, body { height: 100%; margin: 0; padding: 0; }
 }
 
 /* Button group view mode */
-#button-group-view-mode { width: 100%; height: 4.375em; }
+#button-group-view-mode { width: 100%; height: 70%; }
 
 /* Button group left right */
-#button-group-left-right { width: 100%; height: 1.875em; margin: 0em; }
+#button-group-left-right { width: 100%; height: 30%; margin: 0em; }
 
 /* Previous and next buttons */
 .fc-prev-button, .fc-next-button {
@@ -82,7 +138,7 @@ html, body { height: 100%; margin: 0; padding: 0; }
   border: 0.05em solid #111 !important; 
   border-bottom: 0em !important; 
   font-size: 1.2em !important; 
-  padding: 0em 0.7em !important;
+  padding: 0em 0.9em !important;
 }
 
 /* Previous and next button text */
@@ -101,7 +157,7 @@ html, body { height: 100%; margin: 0; padding: 0; }
   height: 100%; 
   background: linear-gradient(to right, #f0f0f0, transparent); 
   align-items: center; 
-  padding: 0.625em 1.875em 0.625em 1.25em; 
+  padding: 0.625em 1.875em 0.1em 1.25em; 
   font-size: 1.3em; 
   padding-right: 0em;
 }
@@ -148,17 +204,17 @@ html, body { height: 100%; margin: 0; padding: 0; }
   width: 100%; 
   height: 100%; 
   overflow: auto; 
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--modal-background); /* Background of window when modal is displayed */
 }
 
 /* Modal body */
-.modal-body { padding: 1.25em; background: white; }
+.modal-body { padding: 1.25em; background: var(--modal-content-background);}
 
 /* Modal header */
 .modal-header {
   font-family: Georgia, serif; 
   font-style: bold; 
-  background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 92%, rgba(139,139,139,1) 100%); 
+  background: var(--modal-header-background); 
   color: #000; 
   padding: 2.5em .5em;
   border-bottom: 0.125em solid black; 
@@ -176,7 +232,7 @@ html, body { height: 100%; margin: 0; padding: 0; }
   top: 50%; 
   left: 50%; 
   transform: translate(-50%, -50%); 
-  background-color: #fff; 
+  background-color: var(--modal-content-background); 
   border-radius: 0.625em; 
   box-shadow: 0 0.25em 0.625em rgba(0, 0, 0, 0.25); 
   box-sizing: border-box; 
@@ -263,16 +319,16 @@ html, body { height: 100%; margin: 0; padding: 0; }
 }
 
 /* Confirm button */
-#confirmButton { background: linear-gradient(to bottom, #6ede85, #2bae4b); }
+#confirmButton { background: var(--confirm-button-color); }
 
 /* Confirm button hover */
-#confirmButton:hover { background: linear-gradient(to bottom, #54b96a, #239442); }
+#confirmButton:hover { background: var(--confirm-button-hover-color); }
 
 /* Cancel button */
-#cancelButton { background: linear-gradient(to bottom, #f27575, #c0392b); }
+#cancelButton { background: var(--cancel-button-color); }
 
 /* Cancel button hover */
-#cancelButton:hover { background: linear-gradient(to bottom, #e05656, #a93226); }
+#cancelButton:hover { background: var(--cancel-button-hover-color); }
 
 /* Modal footer */
 .modal-footer { display: flex; margin-top: 1.25em; }
@@ -297,14 +353,14 @@ html, body { height: 100%; margin: 0; padding: 0; }
   padding: 0.625em 1.25em; 
   font-size: 1em; 
   cursor: pointer; 
-  background: linear-gradient(to bottom, #9e9e9e, #707070); 
+  background: var(--modal-footer-background);
   color: white; 
   border: none; 
   border-radius: 0.3125em;
 }
 
 /* Profile modal footer button hover */
-#profileModal .modal-footer button:hover { background: linear-gradient(to bottom, #a0a0a0, #333333); }
+#profileModal .modal-footer button:hover { background: var(--modal-footer-background-hover); }
 
 /* Day grid day frame */
 .fc-daygrid-day-frame { max-height: 10.625em; overflow-y: auto; }
@@ -315,7 +371,7 @@ html, body { height: 100%; margin: 0; padding: 0; }
 /* Event title not sticky */
 .fc-event-title:not(.fc-sticky) {
   text-align: center; 
-  background-color: rgb(169, 211, 226); 
+  background-color: var(--month-view-event-background); 
   padding: 0.125em 0.3125em; 
   border-radius: 0.1875em; 
   font-size: 1.35em;
@@ -323,7 +379,7 @@ html, body { height: 100%; margin: 0; padding: 0; }
 
 /* Event title container */
 .fc-event-title-container {
-  background: linear-gradient(178deg, rgba(181,255,169,1) 17%, rgba(189,247,159,1) 36%, rgba(130,255,132,1) 66%, rgba(54,235,101,1) 95%); 
+  background: var(--week-view-event-background); 
   color: black; 
   font-size: 1.3em; 
   font-family: Tahoma, serif; 
@@ -341,7 +397,7 @@ html, body { height: 100%; margin: 0; padding: 0; }
 /* Column header cell */
 .fc-col-header-cell {
   text-align: center; 
-  background: linear-gradient(0deg, rgba(110,110,110,1) 0%, rgba(0,0,0,1) 41%); 
+  background: var(--column-header-background);
   color: white; 
   font-weight: bold; 
   font-size: 1.4em;
@@ -349,35 +405,46 @@ html, body { height: 100%; margin: 0; padding: 0; }
 
 /* Time grid slot label */
 .fc-timegrid-slot-label, .fc-timegrid-slot-label.fc-timegrid-slot-minor {
-  background-color: rgb(140, 140, 140); 
+  background-color: var(--timegrid-axis-major-background); 
   color: white; 
   font-weight: bold; 
   font-size: 1.2em;
 }
 
 /* Time grid slot minor label */
-.fc-timegrid-slot-label.fc-timegrid-slot-minor { background-color: rgb(170,170,170); }
+.fc-timegrid-slot-label.fc-timegrid-slot-minor { background-color: var(--timegrid-axis-minor-background); }
 
 /* Day grid day top */
-.fc-daygrid-day-top { text-align: center; background-color: darkblue; color: white; font-weight: bold; }
+.fc-daygrid-day-top { text-align: center;
+  background: var(--month-view-day-header-background);
+  color: white;
+  font-weight: 1000;
+ }
+
+.fc-daygrid-day-number {
+  font-size: 1.25em;
+  background: linear-gradient(90deg, rgb(0,0,0,0) 0%, rgba(102, 102, 102, 0.15) 15%, rgb(45, 45, 45, .3) 65%, rgb(45, 45, 45, .4) 94%, #5a5a5a 100%);
+  padding-left: 1.4em !important;
+  padding-right: .5em !important;
+}
 
 /* Day disabled */
-.fc-day-disabled { background-color: grey !important; }
+.fc-day-disabled { background-color: var(--disabled-day-background) !important; }
 
 /* Day grid event dot */
 .fc-daygrid-event-dot { display: none; }
 
 /* Day disabled */
-.fc-day-disabled { background-color: #a1a1a1 !important; }
+.fc-day-disabled { background-color: var(--disabled-day-background) !important; }
 
 /* Column header cell day disabled */
-.fc-col-header-cell.fc-day-disabled { background-color: #777 !important; }
+.fc-col-header-cell.fc-day-disabled { background-color: var(--disabled-day-header-background) !important; }
 
 /* Time grid axis */
-.fc-timegrid-axis { background-color: rgb(170,170,170); }
+.fc-timegrid-axis { background-color: var(--timegrid-axis-minor-background); }
 
 /* Flash red animation */
-@keyframes flashRed { 0% { background-color: #ffcccc; } 50% { background-color: #ff6666; } 100% { background-color: #ffcccc; } }
+@keyframes flashRed { 0% { background-color: var(--flash-red-start); } 50% { background-color: var(--flash-red-middle); } 100% { background-color: var(--flash-red-end); } }
 
 /* Flash red class */
 .flash-red { animation: flashRed 1s ease-in-out; }
