@@ -35,14 +35,23 @@
 		<div class="modal-body">
 		  <label for="fullName">Full Name</label>
 		  <input type="text" id="fullName" name="fullName" />
+
 		  <label for="email">Email</label>
 		  <input type="text" id="email" name="email" />
+
 		  <label for="visitCategory">Visit Category</label>
-		  <select id="visitCategory" name="visitCategory">
-			<option value="Advising">Advising</option>
-			<option value="Class Content">Class Content</option>
-			<option value="Other">Other</option>
-		  </select>
+		  <div class="select-wrapper">
+			<div class="select-visitCategory" id="visitCategory">
+			  <div class="select-trigger">Select a category</div>
+			  <div class="select-options">
+				<span class="select-option" data-value="Advising">Advising</span>
+				<span class="select-option" data-value="Class Content">Class Content</span>
+				<span class="select-option" data-value="Other">Other</span>
+			  </div>
+			</div>
+		  </div>
+		  <input type="hidden" id="visitCategory" name="visitCategory" value="">
+		  
 		  <label for="visitReason">Reason for Visit</label>
 		  <textarea id="visitReason" name="visitReason"></textarea>
 		  
@@ -84,10 +93,10 @@
 	  </div>
 	</div>
 
-
-
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-  <script src="script.js"></script> <!-- Link to the external JavaScript file -->
+  <script src="script.js" type="module"></script>
+  <script src="eventHandlers.js" type="module"></script>
+  <script src="calendarFunctions.js" type="module"></script>
 
 </body>
 </html>

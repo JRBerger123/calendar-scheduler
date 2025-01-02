@@ -1,361 +1,432 @@
-toolbarhtml, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+/* General styles */
+html, body { height: 100%; margin: 0; padding: 0; }
 
-#calendar {
-  height: 100vh; /* Use the full viewport height */
-}
+/* Calendar container */
+#calendar { height: 100vh; }
 
-.fc-header-toolbar { /* Title div */
-  padding-bottom: 1px;
-  margin: 0px !important;
+/* Header toolbar */
+.fc-header-toolbar { 
+  padding-bottom: 0.0625em; 
+  margin: 0em !important; 
   background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 58%, rgba(147,145,145,1) 85%, rgb(122, 122, 122) 100%);
 }
 
-.fc-toolbar-chunk {
-  display: flex;
-  align-items: center;
-}
+/* Toolbar chunk title */
+#toolbar-chunk-title { margin: 1em 2em 0.5em 2em !important; justify-content: center; }
 
+/* Toolbar title */
 .fc-toolbar-title {
-  flex-grow: 1;
-  font-size: 2.5em !important;
-  font-family: Tahoma, serif;
-  font-weight: bold;
-  background-color: rgba(255,255,255,.5);
-  margin-top: 8px !important;
-  padding: 14px 18px 16px 18px;
-  border-radius: 3px;
-  border: 1px solid #111;
-  word-break: break-word;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Adds a shadow around the title */
+  flex-grow: 1; 
+  font-size: 2.5em !important; 
+  font-family: Tahoma, serif; 
+  font-weight: bold; 
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(230, 230, 230, 0.9)); 
+  padding: 0.6em 1.2em; 
+  border-radius: 0.2em; 
+  word-break: break-word; 
+  text-align: center; 
+  box-shadow: inset 0 0.1em 0.2em rgba(255, 255, 255, 0.7), inset -0.1em -0.1em 0.2em rgba(0, 0, 0, 0.2), inset 0.1em -0.1em 0.2em rgba(0, 0, 0, 0.2), inset 0 -0.1em 0.2em rgba(0, 0, 0, 0.2), 0 0.5em 1em rgba(0, 0, 0, 0.3); 
+  color: #1f1e1e; 
+  text-shadow: 0 0.02em 0.8em rgba(179, 169, 169, 0.5); 
+  position: relative; 
+  overflow: hidden;
 }
 
+/* Toolbar title before pseudo-element */
+.fc-toolbar-title::before {
+  content: ''; 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  border-radius: inherit; 
+  box-shadow: inset 0 0.1em 0.2em rgba(0, 0, 0, 0.1), inset 0 -0.1em 0.2em rgba(255, 255, 255, 0.5); 
+  pointer-events: none;
+}
+
+/* Toolbar chunk view mode */
 #toolbar-chunk-view-mode {
-  margin: 20px 20px 10px 0px;
-  font-size: 1.2em;
+  margin: 1em 2em 0.5em 0; 
+  font-size: 1.2em; 
+  flex-direction: column; 
+  align-items: center; 
+  height: calc(100% - 1.5em); 
+  box-shadow: inset 0 0.2em 0.4em rgba(0, 0, 0, 0.5); 
+  overflow: hidden; 
+  padding: 0.3em; 
+  background-color: rgba(65, 131, 161, 0.199);
 }
 
-#calendar-logo {
-  display: none;
-  /*background: linear-gradient(90deg, rgba(117,113,113,1) 0%, rgba(156,155,155,0.7301121132046569) 61%, rgba(169,169,169,0) 100%);*/
-  background: linear-gradient(to right, #f0f0f0, transparent);
-  align-items: center;
-  padding: 10px 30px 10px 20px;
-  font-size: 1.3em;
-  padding-right: 0px;
-}
+/* Button group view mode */
+#button-group-view-mode { width: 100%; height: 4.375em; }
 
-#professor-name {
-  font-size: 1.3em;
-  font-weight: bold;
-}
+/* Button group left right */
+#button-group-left-right { width: 100%; height: 1.875em; margin: 0em; }
 
-#calendar-logo p {
-  margin: 5px 0px;
-}
-
-#div-profile-image {
-  z-index: 10;
-}
-
-#profile-image {
-  width: 100px; 
-  height: 100px;
-  border-radius: 50%;
-  border: 2px solid #333; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-#div-professor-info {
-  display: flex;
+/* Previous and next buttons */
+.fc-prev-button, .fc-next-button {
+  border-top-left-radius: 0 !important; 
+  border-top-right-radius: 0 !important; 
+  padding: 0.3em 0em !important; 
+  border: 0.05em solid #111 !important; 
+  display: flex; 
+  align-items: center; 
   justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 10px;
-  background-color: rgba(255,255,255,.5);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  padding: 4px 8px 4px 63.6px;
-  position: relative;
-  left: -63.6px;
 }
 
+/* Today, week, and month buttons */
+.fc-today-button , .fc-timeGridWeek-button, .fc-dayGridMonth-button {
+  border-bottom-left-radius: 0 !important; 
+  border-bottom-right-radius: 0 !important; 
+  border: 0.05em solid #111 !important; 
+  border-bottom: 0em !important; 
+  font-size: 1.2em !important; 
+  padding: 0em 0.7em !important;
+}
+
+/* Previous and next button text */
+.fc-prev-button p, .fc-next-button p {
+  margin: 0em; 
+  font-weight: bold; 
+  height: 100%; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center;
+}
+
+/* Calendar logo */
+#calendar-logo {
+  display: none; 
+  height: 100%; 
+  background: linear-gradient(to right, #f0f0f0, transparent); 
+  align-items: center; 
+  padding: 0.625em 1.875em 0.625em 1.25em; 
+  font-size: 1.3em; 
+  padding-right: 0em;
+}
+
+/* Professor name */
+#professor-name { font-size: 1.3em; font-weight: bold; }
+
+/* Calendar logo text */
+#calendar-logo p { margin: 0.3125em 0em; }
+
+/* Profile image container */
+#div-profile-image { z-index: 10; }
+
+/* Profile image */
+#profile-image {
+  width: 6.25em; 
+  height: 6.25em; 
+  border-radius: 50%; 
+  border: 0.05em solid rgba(0, 0, 0, 0.7); 
+  box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.5);
+}
+
+/* Professor info container */
+#div-professor-info {
+  display: flex; 
+  justify-content: center; 
+  flex-direction: column; 
+  align-items: center; 
+  margin-top: 0.625em; 
+  background-color: rgba(255,255,255,.8); 
+  box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.5); 
+  padding: 0.25em 0.375em 0.25em 3.1em; 
+  position: relative; 
+  left: -3em;
+}
+
+/* Modal */
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black background */
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0; 
+  top: 0; 
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-body {
-  padding: 20px;
-  background: white;
-}
+/* Modal body */
+.modal-body { padding: 1.25em; background: white; }
 
+/* Modal header */
 .modal-header {
-  font-family: Georgia, serif;
-  font-style: bold;
-  background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 92%, rgba(139,139,139,1) 100%);
-  color: #000;
-  padding: 10px 6px;
-  border-bottom: 2px solid black;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-  border-top-left-radius: 10px; /* Rounded corners for the top-left */
-  border-top-right-radius: 10px; /* Rounded corners for the top-right */
+  font-family: Georgia, serif; 
+  font-style: bold; 
+  background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 92%, rgba(139,139,139,1) 100%); 
+  color: #000; 
+  padding: 2.5em .5em;
+  border-bottom: 0.125em solid black; 
+  box-shadow: 0 0.125em 0.25em rgba(0, 0, 0, 0.8); 
+  border-top-left-radius: 0.625em; 
+  border-top-right-radius: 0.625em;
 }
 
-.modal-time-header {
-  text-align: center;	
-}
+/* Modal time header */
+.modal-time-header { text-align: center; }
 
+/* Modal content */
 .modal-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  box-sizing: border-box;
-  width: 80%;
-  max-width: 600px;
-  border: 1px solid black;
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  background-color: #fff; 
+  border-radius: 0.625em; 
+  box-shadow: 0 0.25em 0.625em rgba(0, 0, 0, 0.25); 
+  box-sizing: border-box; 
+  width: 80%; 
+  max-width: 37.5em; 
+  border: 0.0625em solid black;
 }
 
+/* Modal content header */
 .modal-content h2 {
-  text-align: center; /* Center the title */
-  font-size: 2.6rem; /* Adjust font size as needed */
-  margin-bottom: 18px;
-  margin-top: 18px;
+  text-align: center;
+  font-size: 2.3em;
+  margin-bottom: 0;
+  margin-top: 0;
 }
 
+/* Modal content label */
 .modal-content label {
-  font-family: Georgia, serif;
-  text-align: center; /* Center justify input headers */
-  display: block; /* Ensure labels are block elements */
-  font-size: 1.3rem;
-  font-weight: bold;
-  background: linear-gradient(180deg, rgba(242,242,242,1) 16%, rgba(240,240,240,1) 96%);
-  padding-top: 2px;
-  padding-bottom: 5px;
-  border-top: 1px solid grey;
-  border-left: 1px solid grey;
-  border-right: 1px solid grey;
-  border-bottom: 1px solid #ccc;
+  font-family: Georgia, serif; 
+  text-align: center; 
+  display: block; 
+  font-size: 1.3em; 
+  font-weight: bold; 
+  background: linear-gradient(180deg, rgba(242,242,242,1) 16%, rgba(240,240,240,1) 96%); 
+  padding: 0.5em 0; 
+  border-top: 0.0625em solid grey; 
+  border-left: 0.0625em solid grey; 
+  border-right: 0.0625em solid grey; 
+  border-bottom: 0.0625em solid #ccc;
 }
 
+/* Modal content input, select, textarea */
 .modal-content input,
-.modal-content select,
+.modal-content div.select-trigger,
 .modal-content textarea {
-  width: 100%;
-  padding: 10px;
-  background: #ffffffcf;
-  margin-bottom: 15px;
-  border-top: 0px;
-  border-left: 1px solid grey;
-  border-right: 1px solid grey;
-  border-bottom: 1px solid grey;
-  box-sizing: border-box;
-  font-size: 1rem;
+  width: 100%; 
+  padding: 0.625em; 
+  background: #ffffffcf; 
+  margin-bottom: 0.9375em; 
+  border-top: 0em; 
+  border-left: 0.0625em solid grey; 
+  border-right: 0.0625em solid grey; 
+  border-bottom: 0.0625em solid grey; 
+  box-sizing: border-box; 
+  font-size: 1em;
 }
 
-.modal-body input, .modal-body select {
-  text-align: center; /* Center the text inside inputs and selects */
-}
+/* Modal body input, select */
+.modal-body input, .modal-body select { text-align: center; }
 
-#visitReason {
-  height: 100px; /* Adjust this value as needed */
-  margin-top: 0px;
-  resize: vertical; /* Limit the resizing to vertical only */
-}
+/* Visit reason textarea */
+#visitReason { height: 6.25em; margin-top: 0em; resize: vertical; }
 
+/* Appointment summary */
 .appointment-summary {
-  font-size: 1.3rem;
-  padding-bottom: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+  font-size: 1.3rem; 
+  padding-bottom: 0.3125em; 
+  border: 0.0625em solid #ccc; 
+  border-radius: 0.1875em; 
   background: white;
 }
 
+/* Summary line */
 .summary-line {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 25px;
-  border-bottom: 1px solid #ccc;
-  width: 100% - 50px;
+  display: flex; 
+  justify-content: space-between; 
+  padding: 0.3125em 1.5625em; 
+  border-bottom: 0.0625em solid #ccc; 
+  width: 100% - 3.125em;
 }
 
-#selectedTime {
-  text-align: center;
-  padding-top: 10px;
-  margin: 0px;
-  margin-bottom: 20.8px;
-}
+/* Selected time */
+#selectedTime { text-align: center; padding-top: 0.625em; margin: 0em; margin-bottom: 1.3em; }
 
+/* Modal content button */
 .modal-content button {
-  font-family: Georgia, serif;
-  font-weight: bold;
-  font-size: 1.4rem;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
+  font-family: Georgia, serif; 
+  font-weight: bold; 
+  font-size: 1.4rem; 
+  border: none; 
+  border-radius: 0.1875em; 
+  cursor: pointer; 
   color: #fff;
 }
 
-#confirmButton {
-  background: linear-gradient(to bottom, #6ede85, #2bae4b); /* Green gradient */
-}
+/* Confirm button */
+#confirmButton { background: linear-gradient(to bottom, #6ede85, #2bae4b); }
 
-#confirmButton:hover {
-  background: linear-gradient(to bottom, #54b96a, #239442); /* Darker green gradient */
-}
+/* Confirm button hover */
+#confirmButton:hover { background: linear-gradient(to bottom, #54b96a, #239442); }
 
-#cancelButton {
-  background: linear-gradient(to bottom, #f27575, #c0392b); /* Red gradient */
-}
+/* Cancel button */
+#cancelButton { background: linear-gradient(to bottom, #f27575, #c0392b); }
 
-#cancelButton:hover {
-  background: linear-gradient(to bottom, #e05656, #a93226); /* Darker red gradient */
-}
+/* Cancel button hover */
+#cancelButton:hover { background: linear-gradient(to bottom, #e05656, #a93226); }
 
-.modal-footer {
-  display: flex;
-  margin-top: 20px;
-}
+/* Modal footer */
+.modal-footer { display: flex; margin-top: 1.25em; }
 
-.modal-footer button {
-  flex: 1; /* Make buttons take equal space */
-  padding: 10px;
-  margin: 0 5px;
-}
+/* Modal footer button */
+.modal-footer button { flex: 1; padding: 0.625em; margin: 0 0.3125em; }
 
-/* Profile Modal Styles */
-#profileModal .modal-content {
-  width: 50%;
-  max-width: 400px;
-}
+/* Profile modal content */
+#profileModal .modal-content { width: 50%; max-width: 25em; }
 
-#profile-info {
-  text-align: center;
-}
+/* Profile info */
+#profile-info { text-align: center; }
 
-#profile-image-modal {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  margin-bottom: 20px;
-}
+/* Profile image modal */
+#profile-image-modal { width: 9.375em; height: 9.375em; border-radius: 50%; margin-bottom: 1.25em; }
 
-#profileModal .modal-footer {
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-}
+/* Profile modal footer */
+#profileModal .modal-footer { display: flex; justify-content: space-around; padding: 0.625em; }
 
+/* Profile modal footer button */
 #profileModal .modal-footer button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  background: linear-gradient(to bottom, #9e9e9e, #707070); /* Gradient from lighter grey to darker grey */
-  color: white; /* White text */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
+  padding: 0.625em 1.25em; 
+  font-size: 1em; 
+  cursor: pointer; 
+  background: linear-gradient(to bottom, #9e9e9e, #707070); 
+  color: white; 
+  border: none; 
+  border-radius: 0.3125em;
 }
 
-#profileModal .modal-footer button:hover {
-  background: linear-gradient(to bottom, #a0a0a0, #333333); /* Gradient from darker grey to even darker grey */
-}
+/* Profile modal footer button hover */
+#profileModal .modal-footer button:hover { background: linear-gradient(to bottom, #a0a0a0, #333333); }
 
-.fc-daygrid-day-frame {
-  max-height: 170px; /* Set the maximum height for the day cell */
-  overflow-y: auto;  /* Add a scrollbar when the content exceeds the height */
-}
+/* Day grid day frame */
+.fc-daygrid-day-frame { max-height: 10.625em; overflow-y: auto; }
 
-.fc-daygrid-day-number { /* Day numbers in month view*/
-  font-size: 1.25em;
-}
+/* Day grid day number */
+.fc-daygrid-day-number { font-size: 1.25em; }
 
-.fc-event-title:not(.fc-sticky) { /* div of monthly events */
-  text-align: center;
-  background-color: rgb(169, 211, 226);
-  padding: 2px 5px;
-  border-radius: 3px;
+/* Event title not sticky */
+.fc-event-title:not(.fc-sticky) {
+  text-align: center; 
+  background-color: rgb(169, 211, 226); 
+  padding: 0.125em 0.3125em; 
+  border-radius: 0.1875em; 
   font-size: 1.35em;
 }
 
-.fc-event-title-container { /* div of weekly events */
-  background: linear-gradient(178deg, rgba(181,255,169,1) 17%, rgba(189,247,159,1) 36%, rgba(130,255,132,1) 66%, rgba(54,235,101,1) 95%);
-  color: black;
-  font-size: 1.3em;
-  font-family: Tahoma, serif;
-  display: flex;
-  justify-content: center;
+/* Event title container */
+.fc-event-title-container {
+  background: linear-gradient(178deg, rgba(181,255,169,1) 17%, rgba(189,247,159,1) 36%, rgba(130,255,132,1) 66%, rgba(54,235,101,1) 95%); 
+  color: black; 
+  font-size: 1.3em; 
+  font-family: Tahoma, serif; 
+  display: flex; 
+  justify-content: center; 
   align-items: center;
 }
 
-.fc-event-title {
-  text-align: center;
-}
+/* Event title */
+.fc-event-title { text-align: center; }
 
-.fc-timegrid-event {
-  background-color: white;
-}
+/* Time grid event */
+.fc-timegrid-event { background-color: white; }
 
-.fc-col-header-cell { /* weekday headers */
-  text-align: center;
-  background: linear-gradient(0deg, rgba(110,110,110,1) 0%, rgba(0,0,0,1) 41%);
-  color: white;
-  font-weight: bold;
+/* Column header cell */
+.fc-col-header-cell {
+  text-align: center; 
+  background: linear-gradient(0deg, rgba(110,110,110,1) 0%, rgba(0,0,0,1) 41%); 
+  color: white; 
+  font-weight: bold; 
   font-size: 1.4em;
 }
 
-.fc-timegrid-slot-label, .fc-timegrid-slot-label.fc-timegrid-slot-minor { /* y-axis major divs */
-  background-color: rgb(140, 140, 140);
-  color: white;
-  font-weight: bold;
+/* Time grid slot label */
+.fc-timegrid-slot-label, .fc-timegrid-slot-label.fc-timegrid-slot-minor {
+  background-color: rgb(140, 140, 140); 
+  color: white; 
+  font-weight: bold; 
   font-size: 1.2em;
 }
 
-.fc-timegrid-slot-label.fc-timegrid-slot-minor { /* y-axis minor divs */
-  background-color: rgb(170,170,170);
+/* Time grid slot minor label */
+.fc-timegrid-slot-label.fc-timegrid-slot-minor { background-color: rgb(170,170,170); }
+
+/* Day grid day top */
+.fc-daygrid-day-top { text-align: center; background-color: darkblue; color: white; font-weight: bold; }
+
+/* Day disabled */
+.fc-day-disabled { background-color: grey !important; }
+
+/* Day grid event dot */
+.fc-daygrid-event-dot { display: none; }
+
+/* Day disabled */
+.fc-day-disabled { background-color: #a1a1a1 !important; }
+
+/* Column header cell day disabled */
+.fc-col-header-cell.fc-day-disabled { background-color: #777 !important; }
+
+/* Time grid axis */
+.fc-timegrid-axis { background-color: rgb(170,170,170); }
+
+/* Flash red animation */
+@keyframes flashRed { 0% { background-color: #ffcccc; } 50% { background-color: #ff6666; } 100% { background-color: #ffcccc; } }
+
+/* Flash red class */
+.flash-red { animation: flashRed 1s ease-in-out; }
+
+/* Hide disabled select option from dropdown menu */
+select option[disabled] { display: none; }
+
+/* Custom Dropdown Menu */
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
 }
 
-.fc-daygrid-day-top { /* day headers */
+#visitCategory {
+  position: relative;
+  cursor: pointer;
+}
+
+.select-trigger {
+  padding: 0.625em;
+  background: #ffffffcf;
+  box-sizing: border-box;
+  font-size: 1em;
   text-align: center;
-  background-color: darkblue;
-  color: white;
-  font-weight: bold;
 }
 
-.fc-day-disabled {
-  background-color: grey !important;
+.select-options {
+  --border-size: 0.0625em;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: var(--border-size) solid grey;
+  border-top: 0;
+  display: flex;
+  justify-content: space-evenly;
+  z-index: 2;
+  width: calc(100% - var(--border-size) * 2);
 }
 
-.fc-daygrid-event-dot {
-  display: none; /* Hides the dots */
+.select-option {
+  padding: 0.625em 1em;
+  cursor: pointer;
+  text-align: center;
 }
 
-.fc-button-group {
-  font-size: 1.4em !important;
-  border-radius: 3px !important;
+.select-option:hover {
+  background: #f0f0f0;
 }
-
-.fc-day-disabled {
-    background-color: #a1a1a1 !important;
-}
-
-.fc-col-header-cell.fc-day-disabled {
-    background-color: #777 !important;
-}
-
-.fc-timegrid-axis {
-	background-color: rgb(170,170,170);
-}
+/* End of Custom Dropdown Menu */
