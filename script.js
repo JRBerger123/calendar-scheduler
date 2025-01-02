@@ -32,6 +32,8 @@ Create Settings
 Fix Available timeslots not using the entire day div
 Unselectable timeslots are not greyed out
   - Timeslots are not individual elements, but are part of a row and column div
+Change color of view control buttons
+Make unselectable elements have a pattern
 */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -255,6 +257,11 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('selectedDayDate').textContent = `${day}, ${date.toLocaleDateString()}`;
 
       modal.style.display = "block";
+      // Focus on the first input element
+      const firstInput = modal.querySelector('input');
+      if (firstInput) {
+        firstInput.focus();
+      }
     },
 
     selectAllow: function(selectInfo) {
@@ -300,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
   confirmButton.onclick = function() {
     const fullName = document.getElementById('fullName');
     const email = document.getElementById('email');
-    const visitCategory = document.getElementById('visitCategory');
+    const visitCategory = document.querySelector('.select-trigger');
     const visitReason = document.getElementById('visitReason');
 
     function submitForm() {
@@ -313,18 +320,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!fullName.value) {
             fullName.classList.add('flash-red');
             valid = false;
+            
         }
         if (!email.value) {
             email.classList.add('flash-red');
             valid = false;
         }
-        if (!visitCategory.value) {
+        if (visitCategory.textContent === "" || visitCategory.textContent === "\u200B") {
             visitCategory.classList.add('flash-red');
             valid = false;
         }
-
-        console.log(visitCategory.value);
-        console.log(fullName.value);
 
         // Remove the flash-red class after the animation completes
         setTimeout(() => {
@@ -339,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 calendarFunctions.dateToHour(new Date(selectedInfo.startStr).getHours(), new Date(selectedInfo.startStr).getMinutes()),
                 calendarFunctions.dateToHour(new Date(selectedInfo.endStr).getHours(), new Date(selectedInfo.endStr).getMinutes()),
                 `${calendarFunctions.formatDate(new Date(selectedInfo.startStr))}`,
-                `${visitCategory.value} Meeting for ${calendarFunctions.capitalizeWords(fullName.value)}`,
+                `${visitCategory.textContent} Meeting for ${calendarFunctions.capitalizeWords(fullName.value)}`,
                 fullName.value,
                 email.value,
                 visitCategory.value,

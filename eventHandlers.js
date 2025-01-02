@@ -2,6 +2,7 @@ export function setupEventHandlers(calendar) {
   const selectBox = document.getElementById('visitCategory');
   const selectTrigger = selectBox.querySelector('.select-trigger');
   const selectOptions = selectBox.querySelector('.select-options');
+  const options = Array.from(document.querySelectorAll('.visitCategory .select-option')).map(option => option.getAttribute('data-value'));
   const hiddenInput = document.getElementById('visitCategory');
   const appointmentModal = document.getElementById('appointmentModal');
   const confirmButton = document.getElementById('confirmButton');
@@ -9,6 +10,8 @@ export function setupEventHandlers(calendar) {
   const profileModal = document.getElementById('profileModal');
   const closeProfileappointmentModal = document.getElementById('closeProfileModal');
   const calendarLogo = document.getElementById('calendar-logo');
+
+  var currentIndex = -1;
 
   function navigateView(direction, viewType) { // Iterates the week or month view
     const currentDate = calendar.getDate();
@@ -48,19 +51,6 @@ export function setupEventHandlers(calendar) {
   document.addEventListener('click', function(event) {
     if (!selectBox.contains(event.target)) {
       selectOptions.style.display = 'none';
-    }
-  });
-
-  document.addEventListener('keydown', function(event) {
-    if (event.key === 'ArrowDown' && document.activeElement === selectTrigger) {
-      event.preventDefault();
-    }
-  });
-
-  // Add event listener for Enter key on appointmentModal
-  appointmentModal.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter' && appointmentModal.style.display !== 'none' && !confirmButton.disabled) {
-      confirmButton.onclick();
     }
   });
 
@@ -113,8 +103,38 @@ export function setupEventHandlers(calendar) {
       // Close appointmentModal with Escape key
       if (event.key === 'Escape') {
         appointmentModal.style.display = 'none';
+
+      // Confirm appointmentModal with Enter key
       } else if (event.key === 'Enter' && !confirmButton.disabled) {
-        confirmButton.onclick();
+          if (selectOptions.style.display === 'none' && 
+            document.activeElement !== visitReason) {
+            confirmButton.click();
+          } else if (selectOptions.style.display === 'flex') {
+            selectOptions.style.display = 'none';
+          }
+      }
+
+      if (document.activeElement === selectTrigger) {
+        if (event.key === 'ArrowDown') {
+            if (selectOptions.style.display === 'none') {
+                selectOptions.style.display = 'flex';
+
+            } else {
+                selectOptions.style.display = 'none';
+            }
+
+        } else if (event.key === 'ArrowUp' || event.key === 'Tab' || (event.key === 'Tab' && event.shiftKey)) {
+          selectOptions.style.display = 'none';
+        }
+
+        if (event.key === 'ArrowLeft') {
+          currentIndex = (currentIndex > 0) ? currentIndex - 1 : options.length - 1;
+          selectTrigger.textContent = options[currentIndex];
+
+        } else if (event.key === 'ArrowRight') {
+        currentIndex = (currentIndex < options.length - 1) ? currentIndex + 1 : 0;
+          selectTrigger.textContent = options[currentIndex];
+        }
       }
 
     } else if (isProfileModalOpen) {
@@ -127,10 +147,8 @@ export function setupEventHandlers(calendar) {
       // Navigate to the next or previous view based on arrow keys
       if (event.key === 'ArrowLeft') {
         navigateView(-1, calendar.view.type);
-        console.log("left")
       } else if (event.key === 'ArrowRight') {
         navigateView(1, calendar.view.type);
-        console.log("right")
       }
     }
   });
