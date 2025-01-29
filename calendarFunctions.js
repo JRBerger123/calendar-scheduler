@@ -294,6 +294,20 @@ export function generateAvailableTimes(startDate, endDate, startHour, endHour, s
     return oppositeEventManager;
 }
 
+export function updateDayClassesForMonthView() {
+    const days = document.querySelectorAll('.fc-day-today, .fc-day-future');
+    days.forEach(day => {
+        const events = day.querySelectorAll('.fc-event');
+        //console.log(day);
+        //console.log(events);
+        if (events.length === 0) {
+        //console.log('No events found for day:', day, events);
+        day.classList.remove('fc-day-today', 'fc-day-future');
+        day.classList.add('fc-day-disabled');
+        }
+    });
+}
+
 export function setupToolbar(isInitialView) {
     if (isInitialView) { // initial view
       const buttonGroups = document.querySelectorAll('.fc-button-group');

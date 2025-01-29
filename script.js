@@ -181,12 +181,11 @@ document.addEventListener('DOMContentLoaded', function() {
     calendarFunctions.setupToolbar(false); // Setup the toolbar
 		calendarFunctions.addEvents(tempEventManager, calendar);
 		
-		
 		//console.log(table.rows);
 		//console.log("Month Events:", tempEventManager.getEvents());
 		
 	  } else if ((lastViewType == 'dayGridMonth' && currentViewType == 'timeGridWeek') || // Month -> Week View
-				(lastViewType == 'timeGridWeek' && currentViewType == 'timeGridWeek')){ // Week -> Week View
+				(lastViewType == 'timeGridWeek' && currentViewType == 'timeGridWeek')) { // Week -> Week View
 
 		// Variables
 		lastViewType = currentViewType;
@@ -285,6 +284,12 @@ document.addEventListener('DOMContentLoaded', function() {
   }); // End of calendar
   
   calendar.render();
+
+  /*
+  if (calendar.view.type == 'dayGridMonth') {
+    calendarFunctions.updateDayClassesForMonthView();
+  }
+  */
 
   // Setup event handlers
   setupEventHandlers(calendar);
