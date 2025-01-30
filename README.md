@@ -30,4 +30,4 @@ Calendar Scheduler is a project designed to facilitate seamless appointment sche
 ## Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-username/calendar-scheduler.git
+   git clone https://github.com/jrberger123/calendar-scheduler
