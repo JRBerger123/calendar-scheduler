@@ -501,7 +501,7 @@ export function hideSelectableTimeslots(startingWorkHour, slotsPerHour, unselect
 
       //console.log(`Column ${colIndex}, Row ${rowIndex} - Slot Time:`, slotTime); // Debugging line
 
-      console.log(`Slot Time: ${slotTime}, Now: ${now}, Slot Time - Now: ${slotTime - now}`);
+      //console.log(`Slot Time: ${slotTime}, Now: ${now}, Slot Time - Now: ${slotTime - now}`);
 
       if (now <= slotTime) {
         let overlay = document.getElementById(`overlay-col-${colIndex}-row-${rowIndex}`);

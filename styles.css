@@ -362,11 +362,29 @@ html, body { height: 100%; margin: 0; padding: 0; }
 /* Profile modal footer button hover */
 #profileModal .modal-footer button:hover { background: var(--modal-footer-background-hover); }
 
+/* Table row sizing */
+.fc-daygrid-body > table tr {
+  flex: 1;
+  min-height: 0 !important; /* Critical for height calculation */
+}
+
 /* Day grid day frame */
-.fc-daygrid-day-frame { max-height: 10.625em; overflow-y: auto; }
+.fc-daygrid-day-events { 
+  overflow-y: auto !important; 
+  display: flex;
+  flex-direction: column;
+}
 
 /* Day grid day number */
 .fc-daygrid-day-number { font-size: 1.25em; }
+
+/* Day grid day events */
+fc-daygrid-day-events { display: flex; flex-direction: column; overflow-y: auto; }
+
+/* Remove bottom spacer element */
+.fc-daygrid-day-bottom {
+  display: none !important;
+}
 
 /* Event title not sticky */
 .fc-event-title:not(.fc-sticky) {

@@ -171,9 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         calendarFunctions.hideSelectableTimeslots(startingWorkHour, slotsPerHour, unselectableTimeWindow, firstDay);
 
-      } else if (
-        (currentViewType == "dayGridMonth") // Month View Loaded
-      ) {
+      } else if (currentViewType == "dayGridMonth") { // Month View Loaded
         // Variables
         const today = new Date();
         const currentDate = calendar.getDate(); // Get the current date displayed on the calendar
@@ -218,17 +216,15 @@ document.addEventListener("DOMContentLoaded", function () {
           workingDays,
           eventManager
         );
-        tempEventManager =
-          calendarFunctions.consolidateEvents(tempEventManager);
+        tempEventManager = calendarFunctions.consolidateEvents(tempEventManager);
 
         calendarFunctions.setupToolbar(false); // Setup the toolbar
         calendarFunctions.addEvents(tempEventManager, calendar);
 
         //console.log(table.rows);
         //console.log("Month Events:", tempEventManager.getEvents());
-      } else if (
-        (currentViewType == "timeGridWeek") // Week View Loaded
-      ) {
+
+      } else if (currentViewType == "timeGridWeek") { // Week View Loaded
         // Variables
         lastViewType = currentViewType;
 
@@ -286,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (currentViewType == "dayGridMonth") {
         // Removes rows of unavailable days in Month View
         const table = document.querySelector(".fc-scrollgrid-sync-table");
-        const rows = table.querySelectorAll('tr[role="row"]');
+        var rows = table.querySelectorAll('tr[role="row"]');
         for (let index = rows.length - 1; index >= 0; index--) {
           const row = rows[index];
           const cells = row.querySelectorAll("td");
@@ -300,6 +296,15 @@ document.addEventListener("DOMContentLoaded", function () {
             row.style.display = "none";
           }
         }
+
+        // Sets Row Height in month view
+        rows = Array.from(calendarEl.querySelectorAll('.fc-daygrid-body tr'))
+          .filter(row => window.getComputedStyle(row).display !== 'none');
+
+        rows.forEach(row => {
+          row.style.height = `${100 / rows.length}%`; // Set each row's height as a percentage
+        });
+
       } else {
         if (timeDifference < unselectableTimeWindow) {
           info.el.style.pointerEvents = "none"; // Makes timeslot unselectable
