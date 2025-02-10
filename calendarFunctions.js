@@ -1,93 +1,110 @@
 export class Event {
-    constructor(startTime, endTime, date, title, fullName, email, meetingCategory, reasonForVisit, professor) {
-      this.startTime = startTime;
-      this.endTime = endTime;
-      this.date = date;
-      this.title = title;
-      this.fullName = fullName;
-      this.email = email;
-      this.meetingCategory = meetingCategory;
-      this.reasonForVisit = reasonForVisit;
-      this.professor = professor;
-    }
+  constructor(
+    startTime,
+    endTime,
+    date,
+    title,
+    fullName,
+    email,
+    meetingCategory,
+    reasonForVisit,
+    professor
+  ) {
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.date = date;
+    this.title = title;
+    this.fullName = fullName;
+    this.email = email;
+    this.meetingCategory = meetingCategory;
+    this.reasonForVisit = reasonForVisit;
+    this.professor = professor;
   }
-  
+}
+
 export class EventManager {
-constructor() {
+  constructor() {
     this.events = [];
-}
+  }
 
-addEvent(event) {
+  addEvent(event) {
     this.events.push(event);
-}
+  }
 
-getEvents() {
+  getEvents() {
     return this.events;
-}
+  }
 
-deleteEvent() {
-    this.events.pop();  
-}
+  deleteEvent() {
+    this.events.pop();
+  }
 
-clearEvents() {
+  clearEvents() {
     this.events = [];
-}
+  }
 
-loadEvents(events) {
+  loadEvents(events) {
     this.events = [...events];
-}
+  }
 }
 
 export function adjustSlotHeight(calendarEl, totalSlots) {
-  const timeGridSlots = calendarEl.querySelector('.fc-timegrid-slots');
-  const headerToolbar = calendarEl.querySelector('.fc-header-toolbar');
-  const dayHeader = calendarEl.querySelector('.fc-col-header');
+  const timeGridSlots = calendarEl.querySelector(".fc-timegrid-slots");
+  const headerToolbar = calendarEl.querySelector(".fc-header-toolbar");
+  const dayHeader = calendarEl.querySelector(".fc-col-header");
 
   if (!timeGridSlots || !headerToolbar || !dayHeader) return; // Ensure all elements exist
 
   // Get the full header height including padding and margin
   const headerStyles = window.getComputedStyle(headerToolbar);
-  const headerHeight = headerToolbar.offsetHeight
-    + parseInt(headerStyles.marginTop)
-    + parseInt(headerStyles.marginBottom)
-    + parseInt(headerStyles.paddingTop)
-    + parseInt(headerStyles.paddingBottom);  // Include margins and padding
+  const headerHeight =
+    headerToolbar.offsetHeight +
+    parseInt(headerStyles.marginTop) +
+    parseInt(headerStyles.marginBottom) +
+    parseInt(headerStyles.paddingTop) +
+    parseInt(headerStyles.paddingBottom); // Include margins and padding
 
   // Get the day header height
   const dayHeaderHeight = dayHeader.offsetHeight;
 
   // Calculate the available height for the slots
-  const availableHeight = calendarEl.offsetHeight - headerHeight - dayHeaderHeight - 1;
+  const availableHeight =
+    calendarEl.offsetHeight - headerHeight - dayHeaderHeight - 1;
 
   if (totalSlots > 0) {
-    const slotHeight = availableHeight / totalSlots;  // Divide remaining height by number of slots
+    const slotHeight = availableHeight / totalSlots; // Divide remaining height by number of slots
 
     // Adjust the height of each time slot
-    const timeSlots = calendarEl.querySelectorAll('.fc-timegrid-slot');
-    timeSlots.forEach(slot => {
+    const timeSlots = calendarEl.querySelectorAll(".fc-timegrid-slot");
+    timeSlots.forEach((slot) => {
       slot.style.height = `${slotHeight}px`;
     });
 
     // Adjust the events' height and position based on slot time
-    const events = calendarEl.querySelectorAll('.fc-event'); // Grab all the events
-    events.forEach(eventElement => {
+    const events = calendarEl.querySelectorAll(".fc-event"); // Grab all the events
+    events.forEach((eventElement) => {
       // Use FullCalendar's method to get the event object
       const event = eventElement._fci; // FullCalendar internally attaches event object via _fci
 
       // If the event object is found, get start and end times
       if (event) {
-        const eventStartTime = new Date(event.start);  // FullCalendar event object start time
-        const eventEndTime = new Date(event.end);      // FullCalendar event object end time
+        const eventStartTime = new Date(event.start); // FullCalendar event object start time
+        const eventEndTime = new Date(event.end); // FullCalendar event object end time
 
         // Calculate the time difference between the start of the calendar and event start time
-        const calendarStartTime = new Date(calendarEl.querySelector('.fc-timegrid-slot:first-child').getAttribute('data-time'));
-        const timeDiff = eventStartTime - calendarStartTime;  // Difference in milliseconds
+        const calendarStartTime = new Date(
+          calendarEl
+            .querySelector(".fc-timegrid-slot:first-child")
+            .getAttribute("data-time")
+        );
+        const timeDiff = eventStartTime - calendarStartTime; // Difference in milliseconds
 
         // Calculate the position based on the time difference
-        const eventTop = (timeDiff / (1000 * 60 * 60)) * slotHeight;  // Convert timeDiff to slot height scale
+        const eventTop = (timeDiff / (1000 * 60 * 60)) * slotHeight; // Convert timeDiff to slot height scale
 
         // Calculate the event height based on its duration
-        const eventDuration = (eventEndTime - eventStartTime) / (1000 * 60 * 60);  // Duration in hours
+        const eventDuration =
+          (eventEndTime - eventStartTime) / (1000 * 60 * 60); // Duration in hours
         const eventHeight = eventDuration * slotHeight;
 
         // Set the event's position and height
@@ -110,17 +127,28 @@ export function consolidateEvents(events) {
     //console.log("Current Event:", currentEvent);
 
     if (consolidatedEvents.getEvents().length > 0) {
-      let lastEvent = consolidatedEvents.getEvents()[consolidatedEvents.getEvents().length - 1];
+      let lastEvent =
+        consolidatedEvents.getEvents()[
+          consolidatedEvents.getEvents().length - 1
+        ];
 
       // Parse both the last event's end time and the current event's start time as Date objects
-      let lastEventEndDateTime = new Date(`${lastEvent.date}T${lastEvent.endTime}`);
-      let currentEventStartDateTime = new Date(`${currentEvent.date}T${currentEvent.startTime}`);
+      let lastEventEndDateTime = new Date(
+        `${lastEvent.date}T${lastEvent.endTime}`
+      );
+      let currentEventStartDateTime = new Date(
+        `${currentEvent.date}T${currentEvent.startTime}`
+      );
 
       // Check for "back-to-back" events
-      if (currentEventStartDateTime.getTime() === lastEventEndDateTime.getTime()) {
+      if (
+        currentEventStartDateTime.getTime() === lastEventEndDateTime.getTime()
+      ) {
         // Extend the endTime of the last event to merge
         lastEvent.endTime = currentEvent.endTime;
-        lastEvent.title = `${formatTimeTo12Hour(lastEvent.startTime)} - ${formatTimeTo12Hour(lastEvent.endTime)}`;
+        lastEvent.title = `${formatTimeTo12Hour(
+          lastEvent.startTime
+        )} - ${formatTimeTo12Hour(lastEvent.endTime)}`;
         //console.log("Merging Events:", lastEvent);
       } else {
         //console.log("Adding Event:", currentEvent);
@@ -137,7 +165,7 @@ export function consolidateEvents(events) {
 }
 
 export function addEvents(tempEventManager, calendar) {
-  tempEventManager.getEvents().forEach(event => {
+  tempEventManager.getEvents().forEach((event) => {
     //console.log(`${event.title}`);
     const start = dateTime(event.date, event.startTime);
     const end = dateTime(event.date, event.endTime);
@@ -145,14 +173,14 @@ export function addEvents(tempEventManager, calendar) {
     calendar.addEvent({
       title: event.title || "No Title",
       start: start, // ISO string for start datetime
-      end: end,     // ISO string for end datetime
+      end: end, // ISO string for end datetime
       description: event.reasonForVisit, // Optional additional fields
       extendedProps: {
         professor: event.professor,
         category: event.meetingCategory,
         fullName: event.fullName,
-        email: event.email
-      }
+        email: event.email,
+      },
     });
   });
 }
@@ -167,7 +195,7 @@ export function slotDuration(slotsPerHour) {
   } else if (slotsPerHour >= 4.0) {
     return "00:15:00";
   }
-  return "00:" + String(Math.floor(60 / slotsPerHour)).padStart(2, '0') + ":00";
+  return "00:" + String(Math.floor(60 / slotsPerHour)).padStart(2, "0") + ":00";
 }
 
 export function getBusinessHours(workHour, extendedFormat) {
@@ -187,20 +215,21 @@ export function getBusinessHours(workHour, extendedFormat) {
 }
 
 export function formatTimeTo12Hour(timeStr) {
-  const [hour, minute] = timeStr.split(':');
+  const [hour, minute] = timeStr.split(":");
   const hourInt = parseInt(hour, 10);
-  const ampm = hourInt >= 12 ? 'PM' : 'AM';
+  const ampm = hourInt >= 12 ? "PM" : "AM";
   const formattedHour = hourInt % 12 || 12; // Convert 0 to 12 for AM
   return `${formattedHour}:${minute} ${ampm}`;
 }
 
 export function capitalizeWords(str) {
-  return str.replace(/\b\w+\b/g, word => {
+  return str.replace(/\b\w+\b/g, (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
   });
 }
 
-export function getOrdinal(n) { // Function to get the ordinal suffix (e.g., 1st, 2nd, 3rd)
+export function getOrdinal(n) {
+  // Function to get the ordinal suffix (e.g., 1st, 2nd, 3rd)
   const suffix = ["th", "st", "nd", "rd"];
   const value = n % 100;
   return n + (suffix[(value - 20) % 10] || suffix[value] || suffix[0]);
@@ -208,155 +237,280 @@ export function getOrdinal(n) { // Function to get the ordinal suffix (e.g., 1st
 
 export function formatDate(date) {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
-  const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, so add 1
+  const day = String(date.getDate()).padStart(2, "0"); // Add leading zero if needed
 
   return `${year}-${month}-${day}`;
 }
 
-export function dateToHour(hour, minutes="00") {
+export function dateToHour(hour, minutes = "00") {
   hour = hour >= 10 ? hour : `0${hour}`;
   minutes = minutes >= 10 ? minutes : `0${minutes}`;
   return `${hour}:${minutes}`;
 }
 
-export function sleep(ms) { // Not currently used
-  return new Promise(resolve => setTimeout(resolve, ms));
+export function sleep(ms) {
+  // Not currently used
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function generateAvailableTimes(startDate, endDate, startHour, endHour, slotsPerHour, daysPerWeek, currentEvents) {
-    const currentYear = startDate.getFullYear();
-    const currentMonth = startDate.getMonth();
+export function generateAvailableTimes(
+  startDate,
+  endDate,
+  startHour,
+  endHour,
+  slotsPerHour,
+  daysPerWeek,
+  currentEvents
+) {
+  const currentYear = startDate.getFullYear();
+  const currentMonth = startDate.getMonth();
 
-    const oppositeEventManager = new EventManager();
-    let timeIncrement = Math.floor(60 / slotsPerHour);
+  const oppositeEventManager = new EventManager();
+  let timeIncrement = Math.floor(60 / slotsPerHour);
 
-    let start = new Date(currentYear, currentMonth, startDate.getDate());
-    let end = new Date(currentYear, currentMonth, endDate.getDate());
+  let start = new Date(currentYear, currentMonth, startDate.getDate());
+  let end = new Date(currentYear, currentMonth, endDate.getDate());
 
-    // Iterate through each day in the range
-    for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
-        // Skip days not worked
-        if (!daysPerWeek.includes(currentDate.getDay())) continue;
+  // Iterate through each day in the range
+  for (
+    let currentDate = new Date(start);
+    currentDate <= end;
+    currentDate.setDate(currentDate.getDate() + 1)
+  ) {
+    // Skip days not worked
+    if (!daysPerWeek.includes(currentDate.getDay())) continue;
 
-        // Generate slots for each day
-        for (let hour = startHour; hour < endHour; hour++) {
-            for (let minutes = 0; minutes < 60; minutes += timeIncrement) {
-                let slotStart = new Date(currentDate);
-                slotStart.setHours(hour, minutes, 0, 0);
-                let slotEnd = new Date(slotStart);
-                slotEnd.setMinutes(slotEnd.getMinutes() + timeIncrement);
+    // Generate slots for each day
+    for (let hour = startHour; hour < endHour; hour++) {
+      for (let minutes = 0; minutes < 60; minutes += timeIncrement) {
+        let slotStart = new Date(currentDate);
+        slotStart.setHours(hour, minutes, 0, 0);
+        let slotEnd = new Date(slotStart);
+        slotEnd.setMinutes(slotEnd.getMinutes() + timeIncrement);
 
-                let isOccupied = false;
+        let isOccupied = false;
 
-                // Check if this slot overlaps with any current events
-                for (let event of currentEvents.getEvents()) {
-                    // Parse event date
-					const eventDateParts = event.date.split("-");
-					const eventYear = Number(eventDateParts[0]);
-					const eventMonth = Number(eventDateParts[1]) - 1; // Months are zero-based in JavaScript
-					const eventDay = Number(eventDateParts[2]);
+        // Check if this slot overlaps with any current events
+        for (let event of currentEvents.getEvents()) {
+          // Parse event date
+          const eventDateParts = event.date.split("-");
+          const eventYear = Number(eventDateParts[0]);
+          const eventMonth = Number(eventDateParts[1]) - 1; // Months are zero-based in JavaScript
+          const eventDay = Number(eventDateParts[2]);
 
-					// Parse event start and end times
-					const [eventStartHour, eventStartMinute] = event.startTime.split(":").map(Number);
-					const [eventEndHour, eventEndMinute] = event.endTime.split(":").map(Number);
+          // Parse event start and end times
+          const [eventStartHour, eventStartMinute] = event.startTime
+            .split(":")
+            .map(Number);
+          const [eventEndHour, eventEndMinute] = event.endTime
+            .split(":")
+            .map(Number);
 
-					// Create full Date objects for event start and end times
-					let eventStart = new Date(eventYear, eventMonth, eventDay, eventStartHour, eventStartMinute, 0, 0);
-					let eventEnd = new Date(eventYear, eventMonth, eventDay, eventEndHour, eventEndMinute, 0, 0);
+          // Create full Date objects for event start and end times
+          let eventStart = new Date(
+            eventYear,
+            eventMonth,
+            eventDay,
+            eventStartHour,
+            eventStartMinute,
+            0,
+            0
+          );
+          let eventEnd = new Date(
+            eventYear,
+            eventMonth,
+            eventDay,
+            eventEndHour,
+            eventEndMinute,
+            0,
+            0
+          );
 
-					//console.log("Slot Start: ", slotStart, " Slot End: ", slotEnd, " Event Start: ", eventStart, " Event End: ", eventEnd);
+          //console.log("Slot Start: ", slotStart, " Slot End: ", slotEnd, " Event Start: ", eventStart, " Event End: ", eventEnd);
 
-					// Check if the slot overlaps with the event
-					if (slotStart < eventEnd && slotEnd > eventStart) {
-						isOccupied = true;
-						break;
-					}
-                }
-
-                // If the slot is not occupied, add it to the oppositeEventManager
-                if (!isOccupied) {
-                    const start = dateToHour(slotStart.getHours(), slotStart.getMinutes());
-                    const end = dateToHour(slotEnd.getHours(), slotEnd.getMinutes());
-                    const event = new Event(
-                        `${start}`,
-                        `${end}`,
-                        `${formatDate(currentDate)}`,
-                        `${formatTimeTo12Hour(slotStart.toTimeString().slice(0, 5))} - ${formatTimeTo12Hour(slotEnd.toTimeString().slice(0, 5))}`
-                    );
-
-                    oppositeEventManager.addEvent(event);
-                }
-            }
+          // Check if the slot overlaps with the event
+          if (slotStart < eventEnd && slotEnd > eventStart) {
+            isOccupied = true;
+            break;
+          }
         }
+
+        // If the slot is not occupied, add it to the oppositeEventManager
+        if (!isOccupied) {
+          const start = dateToHour(
+            slotStart.getHours(),
+            slotStart.getMinutes()
+          );
+          const end = dateToHour(slotEnd.getHours(), slotEnd.getMinutes());
+          const event = new Event(
+            `${start}`,
+            `${end}`,
+            `${formatDate(currentDate)}`,
+            `${formatTimeTo12Hour(
+              slotStart.toTimeString().slice(0, 5)
+            )} - ${formatTimeTo12Hour(slotEnd.toTimeString().slice(0, 5))}`
+          );
+
+          oppositeEventManager.addEvent(event);
+        }
+      }
     }
-	//console.log("Opposite Events:", oppositeEventManager.getEvents());
-    return oppositeEventManager;
+  }
+  //console.log("Opposite Events:", oppositeEventManager.getEvents());
+  return oppositeEventManager;
 }
 
 export function updateDayClassesForMonthView() {
-    const days = document.querySelectorAll('.fc-day-today, .fc-day-future');
-    days.forEach(day => {
-        const events = day.querySelectorAll('.fc-event');
-        //console.log(day);
-        //console.log(events);
-        if (events.length === 0) {
-        //console.log('No events found for day:', day, events);
-        day.classList.remove('fc-day-today', 'fc-day-future');
-        day.classList.add('fc-day-disabled');
-        }
-    });
+  const days = document.querySelectorAll(".fc-day-today, .fc-day-future");
+  days.forEach((day) => {
+    const events = day.querySelectorAll(".fc-event");
+    //console.log(day);
+    //console.log(events);
+    if (events.length === 0) {
+      //console.log('No events found for day:', day, events);
+      day.classList.remove("fc-day-today", "fc-day-future");
+      day.classList.add("fc-day-disabled");
+    }
+  });
 }
 
 export function setupToolbar(isInitialView) {
-    if (isInitialView) { // initial view
-      const buttonGroups = document.querySelectorAll('.fc-button-group');
-      const toolbarChunks = document.querySelectorAll('.fc-toolbar-chunk');
+  if (isInitialView) {
+    // initial view
+    const buttonGroups = document.querySelectorAll(".fc-button-group");
+    const toolbarChunks = document.querySelectorAll(".fc-toolbar-chunk");
 
-      buttonGroups[0].id = ('button-group-left-right');
-      buttonGroups[1].id = ('button-group-view-mode');
-      toolbarChunks[0].id = ('toolbar-chunk-left-right');
-      toolbarChunks[1].id = ('toolbar-chunk-title');
-      toolbarChunks[2].id = ('toolbar-chunk-view-mode');
-    }
+    buttonGroups[0].id = "button-group-left-right";
+    buttonGroups[1].id = "button-group-view-mode";
+    toolbarChunks[0].id = "toolbar-chunk-left-right";
+    toolbarChunks[1].id = "toolbar-chunk-title";
+    toolbarChunks[2].id = "toolbar-chunk-view-mode";
+  }
 
-    // Place the profile image in the header toolbar
-    const headerToolbar = document.querySelector('.fc-header-toolbar');
-    const calendarLogo = document.getElementById('calendar-logo');
-    if (headerToolbar && calendarLogo) {
-      calendarLogo.style.display = 'flex'; // Ensure the image is displayed
-      headerToolbar.insertBefore(calendarLogo, headerToolbar.firstChild);
-      calendarLogo.classList.add('fc-toolbar-chunk');
-    }
+  // Place the profile image in the header toolbar
+  const headerToolbar = document.querySelector(".fc-header-toolbar");
+  const calendarLogo = document.getElementById("calendar-logo");
+  if (headerToolbar && calendarLogo) {
+    calendarLogo.style.display = "flex"; // Ensure the image is displayed
+    headerToolbar.insertBefore(calendarLogo, headerToolbar.firstChild);
+    calendarLogo.classList.add("fc-toolbar-chunk");
+  }
 
-    // Move the today button to the left of the week and month buttons
-    const todayWeekMonthButtonGroup = document.getElementById('button-group-view-mode');
-    const todayButton = document.querySelector('.fc-today-button');
-    if (todayWeekMonthButtonGroup && todayButton) {
-      todayWeekMonthButtonGroup.insertBefore(todayButton, todayWeekMonthButtonGroup.firstChild);
-    }
-    
-    // Move the left-right buttons to the left of the today, week, and month buttons
-    const leftRightButtons = document.getElementById('button-group-left-right');
-    const toolbarChunkViewMode = document.getElementById('toolbar-chunk-view-mode');
-    if (leftRightButtons && toolbarChunkViewMode) {
-      toolbarChunkViewMode.firstChild.insertAdjacentElement('afterend', leftRightButtons);
-    }
+  // Move the today button to the left of the week and month buttons
+  const todayWeekMonthButtonGroup = document.getElementById(
+    "button-group-view-mode"
+  );
+  const todayButton = document.querySelector(".fc-today-button");
+  if (todayWeekMonthButtonGroup && todayButton) {
+    todayWeekMonthButtonGroup.insertBefore(
+      todayButton,
+      todayWeekMonthButtonGroup.firstChild
+    );
+  }
 
-    const toolbarChunkLeftRight = document.getElementById('toolbar-chunk-left-right');
-    if (toolbarChunkLeftRight) {
-      toolbarChunkLeftRight.remove();
-    }
+  // Move the left-right buttons to the left of the today, week, and month buttons
+  const leftRightButtons = document.getElementById("button-group-left-right");
+  const toolbarChunkViewMode = document.getElementById(
+    "toolbar-chunk-view-mode"
+  );
+  if (leftRightButtons && toolbarChunkViewMode) {
+    toolbarChunkViewMode.firstChild.insertAdjacentElement(
+      "afterend",
+      leftRightButtons
+    );
+  }
 
-    // Replace span elements with p tags for prev and next buttons
-    const prevButton = document.querySelector('.fc-prev-button');
-    const nextButton = document.querySelector('.fc-next-button');
+  const toolbarChunkLeftRight = document.getElementById(
+    "toolbar-chunk-left-right"
+  );
+  if (toolbarChunkLeftRight) {
+    toolbarChunkLeftRight.remove();
+  }
 
-    if (prevButton) {
-      prevButton.innerHTML = '<p>&lt;</p>'; // Replace with left chevron character
-    }
+  // Replace span elements with p tags for prev and next buttons
+  const prevButton = document.querySelector(".fc-prev-button");
+  const nextButton = document.querySelector(".fc-next-button");
 
-    if (nextButton) {
-      nextButton.innerHTML = '<p>&gt;</p>'; // Replace with right chevron character
-    }
+  if (prevButton) {
+    prevButton.innerHTML = "<p>&lt;</p>"; // Replace with left chevron character
+  }
+
+  if (nextButton) {
+    nextButton.innerHTML = "<p>&gt;</p>"; // Replace with right chevron character
+  }
+}
+
+export function overlayAllTimeslots() {
+  let calendarBody = document.querySelector(".fc-timegrid-body");
+  let slots = document.querySelectorAll(".fc-timegrid-slot-lane");
+  let days = document.querySelectorAll(".fc-col-header-cell");
+
+  days.forEach((dayColumn, colIndex) => {
+      let xPos = dayColumn.offsetLeft;
+      let colWidth = dayColumn.offsetWidth;
+
+      slots.forEach((row, rowIndex) => {
+          let yPos = row.offsetTop;
+          let rowHeight = row.offsetHeight;
+
+          // Create a unique id for the overlay div using column and row index
+          let overlayId = `overlay-col-${colIndex}-row-${rowIndex}`;
+
+          // Check if the overlay div already exists
+          if (document.getElementById(overlayId)) {
+              return; // Skip if the overlay div already exists
+          }
+
+          let overlay = document.createElement("div");
+          overlay.className = 'overlay-timeslot'; // Add a class to identify the overlay
+          overlay.id = overlayId; // Set the unique id
+          overlay.style.position = "absolute";
+          overlay.style.top = `${yPos}px`;
+          overlay.style.left = `${xPos}px`;
+          overlay.style.width = `${colWidth}px`;
+          overlay.style.height = `${rowHeight}px`;
+          overlay.style.backgroundColor = "rgba(128, 128, 128, 1)";
+          overlay.style.pointerEvents = "none"; // Prevents blocking interactions
+          overlay.style.borderLeft = "1px solid white"; // Add 1px white left border
+          overlay.style.borderRight = "1px solid white"; // Add 1px white right border
+          overlay.title = `Column: ${colIndex}, Row: ${rowIndex}`; // Set the title attribute
+
+          calendarBody.appendChild(overlay);
+      });
+  });
+}
+
+export function hideSelectableTimeslots(startingWorkHour, slotsPerHour, unselectableTimeWindow, startDate) {
+  let slots = document.querySelectorAll(".fc-timegrid-slot-lane");
+  let days = document.querySelectorAll(".fc-col-header-cell");
+  const now = new Date();
+
+  days.forEach((dayColumn, colIndex) => {
+    // Calculate the column date based on the current date and column index
+    const columnDate = new Date(startDate);
+    columnDate.setDate(startDate.getDate() + colIndex);
+
+    //console.log(`Column ${colIndex} calculated date:`, startDate); // Debugging line
+
+    slots.forEach((row, rowIndex) => {
+      // Calculate the slot time based on the row index and slots per hour
+      const slotMinutes = (rowIndex % slotsPerHour) * (60 / slotsPerHour);
+      const slotHours = startingWorkHour + Math.floor(rowIndex / slotsPerHour);
+      const slotTime = new Date(columnDate.getFullYear(), columnDate.getMonth(), columnDate.getDate(), slotHours, slotMinutes);
+
+      //console.log(`Column ${colIndex}, Row ${rowIndex} - Slot Time:`, slotTime); // Debugging line
+
+      console.log(`Slot Time: ${slotTime}, Now: ${now}, Slot Time - Now: ${slotTime - now}`);
+
+      if (now <= slotTime) {
+        let overlay = document.getElementById(`overlay-col-${colIndex}-row-${rowIndex}`);
+        if (overlay) {
+          overlay.style.display = "none";
+        } else {
+          overlay.style.display = "block";
+        }
+      }
+    });
+  });
 }
