@@ -108,10 +108,21 @@ html, body { height: 100%; margin: 0; padding: 0; }
   flex-direction: column; 
   align-items: center; 
   height: calc(100% - var(--header-toolbar-top-margin) - calc(var(--header-toolbar-bottom-margin) - .25em)); 
-  box-shadow: inset 0 0.2em 0.4em rgba(0, 0, 0, 0.5); 
+  
   overflow: hidden; 
-  padding: 0.3em; 
-  background-color: rgba(65, 131, 161, 0.199);
+  padding: 0.3em;
+  background: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 
+    0 12px 40px 0 rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
+}
+
+/* Add dynamic hover effect */
+#toolbar-chunk-view-mode:hover {
+  background-color: rgba(121, 154, 170, 0.199);
+  transform: translateY(-1px);
+  box-shadow: inset 0 0.2em 0.4em rgba(0, 0, 0, 0.5); 
 }
 
 /* Button group view mode */
@@ -120,36 +131,88 @@ html, body { height: 100%; margin: 0; padding: 0; }
 /* Button group left right */
 #button-group-left-right { width: 100%; height: 30%; margin: 0em; }
 
-/* Previous and next buttons */
+/* Core Button Styles */
+.fc-prev-button, .fc-next-button,
+.fc-today-button, .fc-timeGridWeek-button, .fc-dayGridMonth-button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  background: linear-gradient(135deg, #f5f5f5 0%, #fff 100%) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+  border: 0.05em solid #111 !important;
+  color: #333 !important;
+  transform-style: preserve-3d;
+  isolation: isolate;
+}
+
+/* Navigation Arrows */
 .fc-prev-button, .fc-next-button {
-  border-top-left-radius: 0 !important; 
-  border-top-right-radius: 0 !important; 
-  padding: 0.3em 0em !important; 
-  border: 0.05em solid #111 !important; 
-  display: flex; 
-  align-items: center; 
+  border-radius: 0 !important;
+  padding: 0.3em 0 !important;
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
 
-/* Today, week, and month buttons */
-.fc-today-button , .fc-timeGridWeek-button, .fc-dayGridMonth-button {
-  border-bottom-left-radius: 0 !important; 
-  border-bottom-right-radius: 0 !important; 
-  border: 0.05em solid #111 !important; 
-  border-bottom: 0em !important; 
-  font-size: 1.2em !important; 
-  padding: 0em 0.9em !important;
+/* Date Range Selectors */
+.fc-today-button, .fc-timeGridWeek-button, .fc-dayGridMonth-button {
+  border-radius: 0 0 !important;
+  border-bottom: 0 !important;
+  font-size: 1.2em !important;
+  padding: 0 0.9em !important;
 }
 
-/* Previous and next button text */
+/* Interactive States */
+.fc-button:not(:disabled) {
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 
+                0 6px 20px rgba(0,0,0,0.12),
+                0 8px 24px rgba(0,0,0,0.06) !important;
+    background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%) !important;
+  }
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+    background: #f0f0f0 !important;
+  }
+}
+
+/* Active State Styling */
+.fc-button-active {
+  position: relative;
+  background: transparent !important;
+  border: 1px 1px 1px solid #000000 !important;
+  color: #b0b0b0 !important;
+  cursor: not-allowed;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
+/* Modern "disabled" indicator */
+.fc-button-active::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 4px;
+}
+
+/* Button Text */
 .fc-prev-button p, .fc-next-button p {
-  margin: 0em; 
-  font-weight: bold; 
-  height: 100%; 
-  display: flex; 
-  flex-direction: column; 
+  margin: 0;
+  font-weight: 700;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
 }
+
+/* Performance Optimization */
+.fc-button::before { transform: translateZ(0) }
 
 /* Calendar logo */
 #calendar-logo {
@@ -375,16 +438,16 @@ html, body { height: 100%; margin: 0; padding: 0; }
   flex-direction: column;
 }
 
+/* Remove bottom spacer element */
+.fc-daygrid-day-bottom {
+  display: none !important;
+}
+
 /* Day grid day number */
 .fc-daygrid-day-number { font-size: 1.25em; }
 
 /* Day grid day events */
 fc-daygrid-day-events { display: flex; flex-direction: column; overflow-y: auto; }
-
-/* Remove bottom spacer element */
-.fc-daygrid-day-bottom {
-  display: none !important;
-}
 
 /* Event title not sticky */
 .fc-event-title:not(.fc-sticky) {
