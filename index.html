@@ -12,14 +12,14 @@
 	<div id="calendar-container">
 		<div id="calendar-logo">
 			<div id="div-profile-image">
-				<img id="profile-image" src="profile-image.jpg" alt="Profile Image">
+				<img id="profile-image" src="images\faculty\placeholder-account.jpg" alt="Profile Image">
 			</div>
 			<div id="div-professor-info">
 				<div id="professor-name">
-					<p>Lori Nicholson, Ph.D.</p>
+					<p>Unselected Faculty</p>
 				</div>
 				<div id="office">
-					<p>Gardner Hall 206K</p>
+					<p></p>
 				</div>
 			</div>
 		</div>
@@ -73,24 +73,52 @@
 
 	<!-- Profile Modal -->
 	<div id="profileModal" class="modal">
-	  <div class="modal-content">
+		<div class="modal-content">
 		<div class="modal-header">
-		  <span id="closeProfileModal" class="close">&times;</span>
-		  <h2>Profile</h2>
+			<span id="closeProfileModal" class="close">&times;</span>
+			<h2>Profile</h2>
 		</div>
 		<div class="modal-body">
-		  <div id="profile-info">
-			<img id="profile-image-modal" src="profile-image.jpg" alt="Profile Image">
-			<h3>Lori Nicholson, Ph.D.</h3>
-			<p>Office: Gardner Hall 206K</p>
-			<p>Email: lori.nicholson@example.com</p>
-		  </div>
+			<div class="profile-carousel">
+			<!-- Carousel Navigation -->
+			<button class="carousel-prev" aria-label="Previous profile">&lsaquo;</button>
+			<button class="carousel-next" aria-label="Next profile">&rsaquo;</button>
+	
+			<!-- Carousel Slides -->
+			<div class="profile-slides">
+				<!-- Slide 1 (Active) -->
+				<div class="profile-slide active">
+				<img src="images\faculty\placeholder-account.jpg" alt="Dr. John Doe" class="profile-image">
+				<div class="profile-info">
+					<h3>John Doe, Ph.D.</h3>
+					<p>Office: Science Building 305</p>
+					<p>Email: john.doe@example.com</p>
+				</div>
+				</div>
+	
+				<!-- Slide 2 -->
+				<div class="profile-slide">
+				<img src="images\faculty\placeholder-account.jpg" alt="Dr. Jane Smith" class="profile-image">
+				<div class="profile-info">
+					<h3>Jane Smith, Ph.D.</h3>
+					<p>Office: Engineering Hall 204</p>
+					<p>Email: jane.smith@example.com</p>
+				</div>
+				</div>
+			</div>
+	
+			<!-- Pagination Dots -->
+			<div class="carousel-dots">
+				<span class="dot active" data-slide="0"></span>
+				<span class="dot" data-slide="1"></span>
+			</div>
+			</div>
 		</div>
 		<div class="modal-footer">
-		  <button id="profileSettingsButton">Profile Settings</button>
-		  <button id="settingsButton">Settings</button>
+			<button class="profile-action" id="profileSettingsButton">Profile Settings</button>
+			<button class="profile-action" id="settingsButton">Calendar Preferences</button>
 		</div>
-	  </div>
+		</div>
 	</div>
 
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>

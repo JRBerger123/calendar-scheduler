@@ -222,6 +222,11 @@ export function formatTimeTo12Hour(timeStr) {
   return `${formattedHour}:${minute} ${ampm}`;
 }
 
+function calculateRefreshInterval(slotDuration) {
+  const [hours, minutes] = slotDuration.split(':');
+  return (parseInt(hours) * 60 + parseInt(minutes)) * 60 * 1000;
+}
+
 export function capitalizeWords(str) {
   return str.replace(/\b\w+\b/g, (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
@@ -441,76 +446,124 @@ export function setupToolbar(isInitialView) {
   }
 }
 
-export function overlayAllTimeslots() {
-  let calendarBody = document.querySelector(".fc-timegrid-body");
-  let slots = document.querySelectorAll(".fc-timegrid-slot-lane");
-  let days = document.querySelectorAll(".fc-col-header-cell");
+export function overlayAllTimeslots(calendarEl) {
+  let calendarBody = calendarEl.querySelector(".fc-timegrid-body");
+  let slots = calendarBody.querySelectorAll(".fc-timegrid-slot-lane");
+  let days = calendarEl.querySelectorAll(".fc-col-header-cell");
+
+  // Remove existing overlays
+  const overlays = calendarBody.getElementsByClassName('overlay-timeslot');
+  while (overlays.length > 0) {
+    overlays[0].parentNode.removeChild(overlays[0]);
+  }
 
   days.forEach((dayColumn, colIndex) => {
-      let xPos = dayColumn.offsetLeft;
-      let colWidth = dayColumn.offsetWidth;
+    let xPos = dayColumn.offsetLeft;
+    let colWidth = dayColumn.offsetWidth;
 
-      slots.forEach((row, rowIndex) => {
-          let yPos = row.offsetTop;
-          let rowHeight = row.offsetHeight;
+    slots.forEach((row, rowIndex) => {
+      let yPos = row.offsetTop;
+      let rowHeight = row.offsetHeight;
 
-          // Create a unique id for the overlay div using column and row index
-          let overlayId = `overlay-col-${colIndex}-row-${rowIndex}`;
-
-          // Check if the overlay div already exists
-          if (document.getElementById(overlayId)) {
-              return; // Skip if the overlay div already exists
-          }
-
-          let overlay = document.createElement("div");
-          overlay.className = 'overlay-timeslot'; // Add a class to identify the overlay
-          overlay.id = overlayId; // Set the unique id
-          overlay.style.position = "absolute";
-          overlay.style.top = `${yPos}px`;
-          overlay.style.left = `${xPos}px`;
-          overlay.style.width = `${colWidth}px`;
-          overlay.style.height = `${rowHeight}px`;
-          overlay.style.backgroundColor = "rgba(128, 128, 128, 1)";
-          overlay.style.pointerEvents = "none"; // Prevents blocking interactions
-          overlay.style.borderLeft = "1px solid white"; // Add 1px white left border
-          overlay.style.borderRight = "1px solid white"; // Add 1px white right border
-          overlay.title = `Column: ${colIndex}, Row: ${rowIndex}`; // Set the title attribute
-
-          calendarBody.appendChild(overlay);
-      });
+      let overlayId = `overlay-col-${colIndex}-row-${rowIndex}`;
+      let overlay = document.createElement("div");
+      overlay.className = 'overlay-timeslot';
+      overlay.id = overlayId;
+      overlay.style.position = "absolute";
+      overlay.style.top = `${yPos}px`;
+      overlay.style.left = `${xPos}px`;
+      overlay.style.width = `${colWidth}px`;
+      overlay.style.height = `${rowHeight}px`;
+      overlay.style.backgroundColor = "rgba(128, 128, 128, 1)";
+      overlay.style.pointerEvents = "none";
+      overlay.style.borderLeft = "1px solid white";
+      overlay.style.borderRight = "1px solid white";
+      calendarBody.appendChild(overlay);
+    });
   });
 }
 
-export function hideSelectableTimeslots(startingWorkHour, slotsPerHour, unselectableTimeWindow, startDate) {
-  let slots = document.querySelectorAll(".fc-timegrid-slot-lane");
-  let days = document.querySelectorAll(".fc-col-header-cell");
+export function hideSelectableTimeslots(
+  startingWorkHour,
+  slotsPerHour,
+  unselectableTimeWindow,
+  viewStartDate,
+  calendarEl // Added parameter to scope DOM queries
+) {
   const now = new Date();
+  const unselectableWindowMs = unselectableTimeWindow * 60 * 1000;
+  
+  // Scope DOM queries to calendar element
+  const dayColumns = calendarEl.querySelectorAll('.fc-col-header-cell');
+  const timeSlots = calendarEl.querySelectorAll('.fc-timegrid-slot-lane');
 
-  days.forEach((dayColumn, colIndex) => {
-    // Calculate the column date based on the current date and column index
-    const columnDate = new Date(startDate);
-    columnDate.setDate(startDate.getDate() + colIndex);
+  dayColumns.forEach((dayColumn, colIndex) => {
+    // Calculate date for this column (viewStartDate + colIndex days)
+    const columnDate = new Date(viewStartDate);
+    columnDate.setDate(viewStartDate.getDate() + colIndex);
+    columnDate.setHours(0, 0, 0, 0); // Normalize to start of day
 
-    //console.log(`Column ${colIndex} calculated date:`, startDate); // Debugging line
-
-    slots.forEach((row, rowIndex) => {
-      // Calculate the slot time based on the row index and slots per hour
+    timeSlots.forEach((timeSlot, rowIndex) => {
+      // Calculate exact slot time
+      const slotHour = startingWorkHour + Math.floor(rowIndex / slotsPerHour);
       const slotMinutes = (rowIndex % slotsPerHour) * (60 / slotsPerHour);
-      const slotHours = startingWorkHour + Math.floor(rowIndex / slotsPerHour);
-      const slotTime = new Date(columnDate.getFullYear(), columnDate.getMonth(), columnDate.getDate(), slotHours, slotMinutes);
+      const slotTime = new Date(columnDate);
+      slotTime.setHours(slotHour, slotMinutes, 0, 0);
 
-      //console.log(`Column ${colIndex}, Row ${rowIndex} - Slot Time:`, slotTime); // Debugging line
+      // Find corresponding overlay
+      const overlay = document.getElementById(
+        `overlay-col-${colIndex}-row-${rowIndex}`
+      );
 
-      //console.log(`Slot Time: ${slotTime}, Now: ${now}, Slot Time - Now: ${slotTime - now}`);
+      if (overlay) {
+        // Calculate time difference in milliseconds
+        const timeDiff = slotTime.getTime() - now.getTime();
+        
+        // Determine if slot should be unselectable
+        const isPast = slotTime < now;
+        const inUnselectableWindow = timeDiff > 0 && 
+          timeDiff <= unselectableWindowMs;
 
-      if (now <= slotTime) {
-        let overlay = document.getElementById(`overlay-col-${colIndex}-row-${rowIndex}`);
-        if (overlay) {
-          overlay.style.display = "none";
-        } else {
-          overlay.style.display = "block";
-        }
+        // Toggle overlay visibility using class for better performance
+        overlay.classList.toggle('fc-unselectable', isPast || inUnselectableWindow);
+        
+        // Add data attributes for debugging
+        overlay.dataset.slotTime = slotTime.toISOString();
+        overlay.dataset.timeDiff = `${Math.round(timeDiff/60000)} mins`;
       }
     });
   });
 }
+
+export const calculateInterval = (slotDuration) => {
+  const [minutes] = slotDuration.split(':').map(Number);
+  return Math.max((minutes * 60 * 1000) / 2, 30000); // Refresh every half-slot-duration or 30s minimum
+};
+
+export const clearAutoRefresh = (intervalRef) => {
+  if (intervalRef) clearInterval(intervalRef);
+  return null;
+};
+
+export const scheduleAutoRefresh = (
+  calendar,
+  { startingWorkHour, slotsPerHour, unselectableTimeWindow, defaultSlotDuration },
+  totalSlots,
+  calendarEl,
+  eventManager
+) => {
+  const interval = calculateInterval(defaultSlotDuration);
+  
+  const refresh = () => {
+    const view = calendar.view;
+    const startDate = view.currentStart;
+    overlayAllTimeslots(calendarEl);
+    hideSelectableTimeslots(startingWorkHour, slotsPerHour, unselectableTimeWindow, startDate, calendarEl);
+    calendar.updateSize();
+    calendar.refetchEvents();
+  };
+
+  // Initial refresh and then set interval
+  refresh();
+  return setInterval(refresh, interval);
+};

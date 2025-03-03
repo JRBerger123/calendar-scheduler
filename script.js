@@ -3,26 +3,6 @@ import * as calendarFunctions from "./calendarFunctions.js";
 
 /*
 To Do:
-Done: Events are not loading properly from EventManager
-Done: Make Week View full screen
-Done: Condense Available Time Slots
-Done: Format Available Time Slots as 12 hour Format
-Done: Load Events when itterating weeks and months
-Done: Fix Available timeslots not being based off of current events
-Done: Center Available Time Slots
-Done: Adjust Title Text to be easier to read
-Done: Press Esc exits modal
-Done: Adjust Month View day heights based on window size
-Done: Make unselectable more obvious
-Done: Fix text-wrap on title
-Done: Create an offset from current time to schedule new appointments
-Done: Clicking the day on Month View sends you to week mode of that day
-Done: Pressing Enter on Modal GUI submits form
-Done: Create Profile Modal
-Done: Fixed error in resizing calendar when window is resized vertically
-Done: Title is not centered
-Done: Create animation for showing part of Modal GUI not being filled out
-
 Make days with no Available timeslots unselectable in Month View
   - Timeslots are not individual elements, but are part of a row and column div
 Make days with no Available timeslots unselectable in Week View
@@ -37,23 +17,35 @@ Make unselectable elements have a pattern
 */
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Variables
-  const startingWorkHour = 9; // Starting Hour (1-24)
-  const endingWorkHour = 17; // Ending Hour (1-24)
-  const workingDays = [1, 2, 3, 4, 5];
-  const monthsAvailable = 5; // How many months out someone can schedule an appointment
-  const slotsPerHour = 2; // Limited to range (1-4)
-  const defaultSlotDuration = calendarFunctions.slotDuration(slotsPerHour);
-  const totalHours = endingWorkHour - startingWorkHour;
-  const totalSlots = totalHours * slotsPerHour;
-  const slotHeight = 100 / totalSlots + "vh";
-  const unselectableTimeWindow = 60; // Time window in minutes within which timeslots are unselectable
-  let lastViewType = null; // Variable to track the last view type
+  // Configuration Constants
+  const CALENDAR_CONFIG = {
+    WORK_HOURS: {
+      START: 9,
+      END: 17
+    },
+    WORKING_DAYS: [1, 2, 3, 4, 5], // Monday-Friday
+    MONTHS_AVAILABLE: 5, // Number of months available in the future based on today's date.
+    SLOTS_PER_HOUR: 2, // Limited to 1-4 slots per hour. 2 is the default.
+    UNSELECTABLE_WINDOW_MINUTES: 60
+  };
 
+  const businessHours = {
+    daysOfWeek: CALENDAR_CONFIG.WORKING_DAYS,
+    startTime: calendarFunctions.getBusinessHours(CALENDAR_CONFIG.WORK_HOURS.START, false),
+    endTime: calendarFunctions.getBusinessHours(CALENDAR_CONFIG.WORK_HOURS.END, false)
+  };
+
+  // Calculate derived layout values
+  const totalHours = CALENDAR_CONFIG.WORK_HOURS.END - CALENDAR_CONFIG.WORK_HOURS.START;
+  const totalSlots = totalHours * CALENDAR_CONFIG.SLOTS_PER_HOUR;
+  const slotHeight = `${100 / totalSlots}vh`; // For CSS integration
+
+  // Other variables
+  const defaultSlotDuration = calendarFunctions.slotDuration(CALENDAR_CONFIG.SLOTS_PER_HOUR);
+  let lastViewType = null; // Variable to track the last view type
   const calendarEl = document.getElementById("calendar");
   const modal = document.getElementById("appointmentModal");
   const confirmButton = document.getElementById("confirmButton");
-
   let selectedInfo;
 
   // Instantiate EventManager
@@ -79,18 +71,18 @@ document.addEventListener("DOMContentLoaded", function () {
     validRange: {
       start: new Date(),
       end: new Date(
-        new Date().setMonth(new Date().getMonth() + monthsAvailable)
+        new Date().setMonth(new Date().getMonth() + CALENDAR_CONFIG.MONTHS_AVAILABLE)
       ),
     },
 
     businessHours: {
-      daysOfWeek: workingDays, // Monday to Friday
-      startTime: calendarFunctions.getBusinessHours(startingWorkHour, false),
-      endTime: calendarFunctions.getBusinessHours(endingWorkHour, false),
+      daysOfWeek: CALENDAR_CONFIG.WORKING_DAYS, // Monday to Friday
+      startTime: calendarFunctions.getBusinessHours(CALENDAR_CONFIG.WORK_HOURS.START, false),
+      endTime: calendarFunctions.getBusinessHours(CALENDAR_CONFIG.WORK_HOURS.END, false),
     },
 
-    slotMinTime: calendarFunctions.getBusinessHours(startingWorkHour, true),
-    slotMaxTime: calendarFunctions.getBusinessHours(endingWorkHour, true),
+    slotMinTime: calendarFunctions.getBusinessHours(CALENDAR_CONFIG.WORK_HOURS.START, true),
+    slotMaxTime: calendarFunctions.getBusinessHours(CALENDAR_CONFIG.WORK_HOURS.END, true),
 
     slotDuration: defaultSlotDuration,
     allDaySlot: false, // Remove all-day slot
@@ -133,13 +125,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       var tempEventManager = new calendarFunctions.EventManager();
 
-      if (lastViewType == null) { // Initial View
-        // Variables
+      if (lastViewType == null) { // Initial View Loaded ---------------------------------------------------
         lastViewType = currentViewType;
 
-        //console.log("Initial View Loaded");
-        //console.log("Initial Events:", eventManager.getEvents());
-
+        // Title Generation
         if (startMonth == endMonth) {
           toolbarTitle.innerHTML = `${startMonth}&nbsp;${calendarFunctions.getOrdinal(
             startDate
@@ -161,18 +150,18 @@ document.addEventListener("DOMContentLoaded", function () {
             )},&nbsp;${endYear}`;
           }
         }
+        // End of Title Generation
 
         calendarFunctions.setupToolbar(true);
         calendarFunctions.adjustSlotHeight(calendarEl, totalSlots);
         calendarFunctions.addEvents(eventManager, calendar);
 
         calendar.render();
+        
         calendarFunctions.overlayAllTimeslots(calendarEl, totalSlots);
+        calendarFunctions.hideSelectableTimeslots(CALENDAR_CONFIG.WORK_HOURS.START, CALENDAR_CONFIG.SLOTS_PER_HOUR, CALENDAR_CONFIG.UNSELECTABLE_WINDOW_MINUTES, firstDay, calendarEl);
 
-        calendarFunctions.hideSelectableTimeslots(startingWorkHour, slotsPerHour, unselectableTimeWindow, firstDay);
-
-      } else if (currentViewType == "dayGridMonth") { // Month View Loaded
-        // Variables
+      } else if (currentViewType == "dayGridMonth") { // Month View Loaded ---------------------------------------------------
         const today = new Date();
         const currentDate = calendar.getDate(); // Get the current date displayed on the calendar
         const endDate = new Date(
@@ -195,12 +184,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         lastViewType = currentViewType;
 
-        //console.log("Month View Loaded");
-        //console.log("Start Day:", startDay);
-        //console.log("End Day:", endDay);
-
+        // Remove all previous events
         calendar.removeAllEvents();
 
+        // Title Generation
         toolbarTitle.innerHTML =
           "Available&nbsp;Times&nbsp;<wbr>-</wbr>&nbsp;" +
           currentDate
@@ -210,10 +197,10 @@ document.addEventListener("DOMContentLoaded", function () {
         tempEventManager = calendarFunctions.generateAvailableTimes(
           startDate,
           endDate,
-          startingWorkHour,
-          endingWorkHour,
-          slotsPerHour,
-          workingDays,
+          CALENDAR_CONFIG.WORK_HOURS.START,
+          CALENDAR_CONFIG.WORK_HOURS.END,
+          CALENDAR_CONFIG.SLOTS_PER_HOUR,
+          CALENDAR_CONFIG.WORKING_DAYS,
           eventManager
         );
         tempEventManager = calendarFunctions.consolidateEvents(tempEventManager);
@@ -221,14 +208,9 @@ document.addEventListener("DOMContentLoaded", function () {
         calendarFunctions.setupToolbar(false); // Setup the toolbar
         calendarFunctions.addEvents(tempEventManager, calendar);
 
-        //console.log(table.rows);
-        //console.log("Month Events:", tempEventManager.getEvents());
+      } else if (currentViewType == "timeGridWeek") { // Week View Loaded ----------------------------------------------
 
-      } else if (currentViewType == "timeGridWeek") { // Week View Loaded
-        // Variables
         lastViewType = currentViewType;
-
-        //console.log("Week View Loaded");
 
         calendar.removeAllEvents();
 
@@ -259,12 +241,9 @@ document.addEventListener("DOMContentLoaded", function () {
         calendarFunctions.addEvents(eventManager, calendar);
 
         calendar.render();
-        if (!document.querySelector('.overlay-timeslot')) {
-          calendarFunctions.overlayAllTimeslots(calendarEl);
-        }
-        calendarFunctions.hideSelectableTimeslots(startingWorkHour, slotsPerHour, unselectableTimeWindow, firstDay);
 
-        //calendarFunctions.hideSelectableTimeslots(calendarEl);
+        calendarFunctions.overlayAllTimeslots(calendarEl, totalSlots);
+        calendarFunctions.hideSelectableTimeslots(CALENDAR_CONFIG.WORK_HOURS.START, CALENDAR_CONFIG.SLOTS_PER_HOUR, CALENDAR_CONFIG.UNSELECTABLE_WINDOW_MINUTES, firstDay, calendarEl);
       } // End of View Change
 
       todayButton.textContent = "Today";
@@ -306,7 +285,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
       } else {
-        if (timeDifference < unselectableTimeWindow) {
+        if (timeDifference < CALENDAR_CONFIG.UNSELECTABLE_WINDOW_MINUTES) {
           info.el.style.pointerEvents = "none"; // Makes timeslot unselectable
         }
       }
@@ -347,10 +326,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const timeDifference = (selectInfo.start - now) / (1000 * 60); // Time difference in minutes
 
       return (
-        selectInfo.start.getHours() >= startingWorkHour &&
-        selectInfo.end.getHours() <= endingWorkHour &&
+        selectInfo.start.getHours() >= CALENDAR_CONFIG.WORK_HOURS.START &&
+        selectInfo.end.getHours() <= CALENDAR_CONFIG.WORK_HOURS.END &&
         (duration === 30 || duration === 60) &&
-        timeDifference >= unselectableTimeWindow
+        timeDifference >= CALENDAR_CONFIG.UNSELECTABLE_WINDOW_MINUTES
       );
     },
 
