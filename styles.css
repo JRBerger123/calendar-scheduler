@@ -24,10 +24,10 @@
     --modal-header-background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 92%, rgba(139,139,139,1) 100%);
     --modal-footer-background: linear-gradient(to bottom, #9e9e9e, #707070);
     --modal-footer-background-hover: linear-gradient(to bottom, #a0a0a0, #333333);
-    --confirm-button-color: linear-gradient(to bottom, #6ede85, #2bae4b);
-    --confirm-button-hover-color: linear-gradient(to bottom, #54b96a, #239442);
-    --cancel-button-color: linear-gradient(to bottom, #f27575, #c0392b);;
-    --cancel-button-hover-color: linear-gradient(to bottom, #e05656, #a93226);;
+    --confirm-button-color: linear-gradient(145deg, #4CAF50, #43A047);
+    --confirm-button-hover-color: linear-gradient(145deg, #66BB6A, #4CAF50);
+    --cancel-button-color: linear-gradient(145deg, #EF5350, #E53935);
+    --cancel-button-hover-color: linear-gradient(145deg, #EF5350, #D32F2F);
     --modal-content-background: #fff;
 
     /* Flash red variables */
@@ -45,6 +45,11 @@
     --unselectable-stripe-width: 2px;
     --unselectable-gap: 12px;
     --pattern-animation: pattern-flow 20s linear infinite;
+
+    /* Design system variables */
+    --button-border-radius: 12px;
+    --button-elevation: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --button-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* General styles */
@@ -450,13 +455,41 @@ html, body { height: 100%; margin: 0; padding: 0; }
 /* Visit reason textarea */
 #visitReason { height: 6.25em; margin-top: 0em; resize: vertical; }
 
-/* Appointment summary */
 .appointment-summary {
-  font-size: 1.3rem; 
-  padding-bottom: 0.3125em; 
-  border: 0.0625em solid #ccc; 
-  border-radius: 0.1875em; 
-  background: white;
+  /* Layout */
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem;
+  margin: 1.5rem 0;
+  
+  /* Visual Design */
+  background: var(--summary-background);
+  border-radius: 1rem;
+  border: 1px solid var(--summary-border);
+  box-shadow: 0px 1px 3px rgba(46, 46, 46, 0.753);
+  position: relative;
+  overflow: hidden;
+  
+  /* Typography */
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--summary-text);
+
+  /* Accent Elements */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(
+      180deg,
+      var(--summary-accent),
+      hsl(215, 80%, 60%)
+    );
+  }
 }
 
 /* Summary line */
@@ -469,7 +502,7 @@ html, body { height: 100%; margin: 0; padding: 0; }
 }
 
 /* Selected time */
-#selectedTime { text-align: center; padding-top: 0.625em; margin: 0em; margin-bottom: 1.3em; }
+#selectedTime { text-align: center; margin: 0px;}
 
 /* Modal content button */
 .modal-content button {
@@ -482,17 +515,122 @@ html, body { height: 100%; margin: 0; padding: 0; }
   color: #fff;
 }
 
-/* Confirm button */
-#confirmButton { background: var(--confirm-button-color); }
+/* Base button styles */
+#confirmButton,
+#cancelButton {
+  position: relative;
+  padding: 14px 28px;
+  border: none;
+  border-radius: var(--button-border-radius);
+  background-clip: padding-box;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: var(--button-transition);
+  transform-style: preserve-3d;
+  overflow: hidden;
+  color: white;
+  box-shadow: var(--button-elevation);
+  
+  /* Holographic border effect */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--button-border-radius);
+    padding: 2px;
+    background: linear-gradient(
+      45deg,
+      rgba(255,255,255,0.3) 0%,
+      rgba(255,255,255,0.1) 100%
+    );
+    mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    transition: inherit;
+  }
+}
 
-/* Confirm button hover */
-#confirmButton:hover { background: var(--confirm-button-hover-color); }
+/* Confirm button specific styles */
+#confirmButton {
+  background-image: var(--confirm-button-color);
+  
+  &:hover {
+    background-image: var(--confirm-button-hover-color);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(67, 160, 71, 0.2);
+    
+    &::before {
+      background: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.5) 0%,
+        rgba(255,255,255,0.2) 100%
+      );
+    }
+  }
+  
+  &:active {
+    transform: translateY(1px) scale(0.98);
+  }
+}
 
-/* Cancel button */
-#cancelButton { background: var(--cancel-button-color); }
+/* Cancel button specific styles */
+#cancelButton {
+  background-image: var(--cancel-button-color);
+  
+  &:hover {
+    background-image: var(--cancel-button-hover-color);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(239, 83, 80, 0.2);
+    
+    &::before {
+      background: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.4) 0%,
+        rgba(255,255,255,0.15) 100%
+      );
+    }
+  }
+  
+  &:active {
+    transform: translateY(1px) scale(0.98);
+  }
+}
 
-/* Cancel button hover */
-#cancelButton:hover { background: var(--cancel-button-hover-color); }
+/* Modern focus states */
+#confirmButton:focus-visible,
+#cancelButton:focus-visible {
+  outline: none;
+  box-shadow: 
+    0 0 0 3px rgba(255,255,255,0.8),
+    0 0 0 5px rgba(67, 160, 71, 0.5);
+}
+
+/* Loading state (optional) */
+.button--loading {
+  position: relative;
+  color: transparent !important;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: button-spin 0.8s linear infinite;
+  }
+}
+
+@keyframes button-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
 /* Modal footer */
 .modal-footer { display: flex;}

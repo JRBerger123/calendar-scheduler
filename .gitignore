@@ -1,1 +1,5 @@
 .vscode
+.gitignore
+TypeScript
+node_modules
+Old Code
