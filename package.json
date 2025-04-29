@@ -1,0 +1,19 @@
+{
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "sass": "^1.87.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.2"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.17",
+    "@fullcalendar/daygrid": "^6.1.17",
+    "@fullcalendar/interaction": "^6.1.17",
+    "@fullcalendar/timegrid": "^6.1.17"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "serve": "vite preview"
+  }
+}

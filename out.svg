@@ -1,0 +1,356 @@
+<svg version="1.1" baseProfile="full" width="2231.8" height="580.0" viewBox="0 0 2231.75 580" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events">
+<desc >#.interface: fill=lightblue
+#.enumeration: fill=lightgreen
+#.type: fill=lightgray
+
+[CalendarConfig|-config: any;-timeSlotsPerHour: number;-maxMeetingDuration: number;-workingHours: { start: number; end: number; }|+getConfig(): any;-validateSelection(): boolean;+setOption(): void;+getOption(): any;+getWorkingHours(): { start: number; end: number; };+setTimeSlotsPerHour(): void;+getTimeSlotsPerHour(): number;+getSlotDuration(): string;+setMaxMeetingDuration(): void;+getTotalSlotsPerDay(): number;+getDefaultConfig(): any]
+[CalendarManager|-calendar: Calendar;-elementId: string;-config: CalendarConfig;-toolbarManager: ToolbarManager;-lastViewType: string;-utils: CalendarUtils|+initialize(): void;-handleViewChange(): void;+addEvent(): void;+changeView(): void;+setTimeSlotsPerHour(): void;+setMaxMeetingDuration(): void;+setConfig(): void;+getConfig(): CalendarConfig;-refresh(): void]
+[CalendarUtils||+removeUnselectableWeeks(): void;+adjustSlotHeight(): void]
+[ToolbarManager||+setupToolbar(): void;-setupInitialToolbar(): void;-placeProfileImage(): void;-rearrangeTodayButton(): void;-rearrangeLeftRightButtons(): void;-removeLeftRightChunk(): void;-replaceNavButtonText(): void]
+[&lt;enumeration&gt;MeetingStatus|SCHEDULED;CANCELLED;COMPLETED;POSTPONED;DRAFT;IN_PROGRESS]
+[&lt;enumeration&gt;UserRole|STUDENT;FACULTY;ADMIN;UNKNOWN]
+[Admin|+accessLevel: number|+canEditCalendar(): boolean]
+[User]&lt;:-[Admin]
+[Faculty|+department: string;+officeLocation: string|+canEditCalendar(): boolean]
+[User]&lt;:-[Faculty]
+[Student|+major: string;+graduationYear: number|+canEditCalendar(): boolean]
+[User]&lt;:-[Student]
+[UnknownUser|+name: string;+scheduledBy: string;+reason: string|+getDisplayName(): string;+isAuthenticated(): boolean]
+[User|+id: string;+name: string;+email: string;+role: UserRole|+getName(): string;+setName(): void;+getRole(): UserRole;+setRole(): void;+getEmail(): string;+setEmail(): void;+canEditCalendar(): boolean;+isAuthenticated(): boolean]</desc>
+<g stroke-width="1.0" text-align="left" font="12pt Helvetica, Arial, sans-serif" font-size="12pt" font-family="Helvetica" font-weight="normal" font-style="normal">
+<g font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" stroke="#33322E">
+<g stroke="transparent" fill="transparent">
+<rect x="0.0" y="0.0" height="580.0" width="2231.8" stroke="none"></rect>
+</g>
+<g transform="translate(8, 8)" fill="#33322E">
+<g transform="translate(20, 20)" fill="#eee8d5" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal">
+<path d="M1641.2 281.6 L1488.25 392 L1488.25 420 L1488.3 420.0 " fill="none"></path>
+<path d="M1644.3 285.9 L1641.2 281.6 L1638.1 277.2 L1652.0 273.7 Z"></path>
+<path d="M1771.9 328.8 L1771.25 392 L1771.25 412 L1771.3 412.0 " fill="none"></path>
+<path d="M1777.3 328.9 L1771.9 328.8 L1766.6 328.8 L1772.1 315.5 Z"></path>
+<path d="M1905.7 283.0 L2054.25 392 L2054.25 412 L2054.3 412.0 " fill="none"></path>
+<path d="M1908.9 278.7 L1905.7 283.0 L1902.6 287.3 L1895.0 275.2 Z"></path>
+<g data-name="CalendarConfig">
+<g fill="#eee8d5" stroke="#33322E" data-name="CalendarConfig">
+<rect x="0.0" y="0.0" height="372.0" width="301.0" data-name="CalendarConfig"></rect>
+<path d="M0.0 32.0 L301.0 32.0" fill="none" data-name="CalendarConfig"></path>
+<path d="M0.0 145.0 L301.0 145.0" fill="none" data-name="CalendarConfig"></path>
+</g>
+<g transform="translate(0, 0)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="CalendarConfig" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="CalendarConfig" data-compartment="0">
+<a id="src\CalendarConfig.ts.CalendarConfig" xlink:href="src\CalendarConfig.ts"><text x="142.5" y="14.1" stroke="none" text-anchor="middle" data-name="CalendarConfig" data-compartment="0">CalendarConfig</text></a>
+
+</g>
+</g>
+<g transform="translate(0, 32)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CalendarConfig" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CalendarConfig" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="CalendarConfig" data-compartment="1">-config: any</text>
+<text x="0.0" y="30.3" stroke="none" data-name="CalendarConfig" data-compartment="1">-timeSlotsPerHour: number</text>
+<text x="0.0" y="46.5" stroke="none" data-name="CalendarConfig" data-compartment="1">-maxMeetingDuration: number</text>
+<text x="0.0" y="62.7" stroke="none" data-name="CalendarConfig" data-compartment="1">-workingHours: { start: number</text>
+<text x="0.0" y="78.9" stroke="none" data-name="CalendarConfig" data-compartment="1">end: number</text>
+<text x="0.0" y="95.1" stroke="none" data-name="CalendarConfig" data-compartment="1">}</text>
+
+</g>
+</g>
+<g transform="translate(0, 145)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CalendarConfig" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CalendarConfig" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="CalendarConfig" data-compartment="2">+getConfig(): any</text>
+<text x="0.0" y="30.3" stroke="none" data-name="CalendarConfig" data-compartment="2">-validateSelection(): boolean</text>
+<text x="0.0" y="46.5" stroke="none" data-name="CalendarConfig" data-compartment="2">+setOption(): void</text>
+<text x="0.0" y="62.7" stroke="none" data-name="CalendarConfig" data-compartment="2">+getOption(): any</text>
+<text x="0.0" y="78.9" stroke="none" data-name="CalendarConfig" data-compartment="2">+getWorkingHours(): { start: number</text>
+<text x="0.0" y="95.1" stroke="none" data-name="CalendarConfig" data-compartment="2">end: number</text>
+<text x="0.0" y="111.3" stroke="none" data-name="CalendarConfig" data-compartment="2">}</text>
+<text x="0.0" y="127.5" stroke="none" data-name="CalendarConfig" data-compartment="2">+setTimeSlotsPerHour(): void</text>
+<text x="0.0" y="143.7" stroke="none" data-name="CalendarConfig" data-compartment="2">+getTimeSlotsPerHour(): number</text>
+<text x="0.0" y="159.9" stroke="none" data-name="CalendarConfig" data-compartment="2">+getSlotDuration(): string</text>
+<text x="0.0" y="176.1" stroke="none" data-name="CalendarConfig" data-compartment="2">+setMaxMeetingDuration(): void</text>
+<text x="0.0" y="192.3" stroke="none" data-name="CalendarConfig" data-compartment="2">+getTotalSlotsPerDay(): number</text>
+<text x="0.0" y="208.5" stroke="none" data-name="CalendarConfig" data-compartment="2">+getDefaultConfig(): any</text>
+
+</g>
+</g>
+</g>
+<g data-name="CalendarManager">
+<g fill="#eee8d5" stroke="#33322E" data-name="CalendarManager">
+<rect x="341.0" y="32.5" height="307.0" width="287.0" data-name="CalendarManager"></rect>
+<path d="M341.0 64.5 L628.0 64.5" fill="none" data-name="CalendarManager"></path>
+<path d="M341.0 177.5 L628.0 177.5" fill="none" data-name="CalendarManager"></path>
+</g>
+<g transform="translate(341, 32.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="CalendarManager" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="CalendarManager" data-compartment="0">
+<a id="src\CalendarManager.ts.CalendarManager" xlink:href="src\CalendarManager.ts"><text x="135.5" y="14.1" stroke="none" text-anchor="middle" data-name="CalendarManager" data-compartment="0">CalendarManager</text></a>
+
+</g>
+</g>
+<g transform="translate(341, 64.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CalendarManager" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CalendarManager" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="CalendarManager" data-compartment="1">-calendar: Calendar</text>
+<text x="0.0" y="30.3" stroke="none" data-name="CalendarManager" data-compartment="1">-elementId: string</text>
+<text x="0.0" y="46.5" stroke="none" data-name="CalendarManager" data-compartment="1">-config: CalendarConfig</text>
+<text x="0.0" y="62.7" stroke="none" data-name="CalendarManager" data-compartment="1">-toolbarManager: ToolbarManager</text>
+<text x="0.0" y="78.9" stroke="none" data-name="CalendarManager" data-compartment="1">-lastViewType: string</text>
+<text x="0.0" y="95.1" stroke="none" data-name="CalendarManager" data-compartment="1">-utils: CalendarUtils</text>
+
+</g>
+</g>
+<g transform="translate(341, 177.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CalendarManager" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CalendarManager" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="CalendarManager" data-compartment="2">+initialize(): void</text>
+<text x="0.0" y="30.3" stroke="none" data-name="CalendarManager" data-compartment="2">-handleViewChange(): void</text>
+<text x="0.0" y="46.5" stroke="none" data-name="CalendarManager" data-compartment="2">+addEvent(): void</text>
+<text x="0.0" y="62.7" stroke="none" data-name="CalendarManager" data-compartment="2">+changeView(): void</text>
+<text x="0.0" y="78.9" stroke="none" data-name="CalendarManager" data-compartment="2">+setTimeSlotsPerHour(): void</text>
+<text x="0.0" y="95.1" stroke="none" data-name="CalendarManager" data-compartment="2">+setMaxMeetingDuration(): void</text>
+<text x="0.0" y="111.3" stroke="none" data-name="CalendarManager" data-compartment="2">+setConfig(): void</text>
+<text x="0.0" y="127.5" stroke="none" data-name="CalendarManager" data-compartment="2">+getConfig(): CalendarConfig</text>
+<text x="0.0" y="143.7" stroke="none" data-name="CalendarManager" data-compartment="2">-refresh(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="CalendarUtils">
+<g fill="#eee8d5" stroke="#33322E" data-name="CalendarUtils">
+<rect x="668.0" y="142.0" height="88.0" width="297.0" data-name="CalendarUtils"></rect>
+<path d="M668.0 174.0 L965.0 174.0" fill="none" data-name="CalendarUtils"></path>
+<path d="M668.0 182.0 L965.0 182.0" fill="none" data-name="CalendarUtils"></path>
+</g>
+<g transform="translate(668, 142)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="CalendarUtils" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="CalendarUtils" data-compartment="0">
+<a id="src\CalendarUtils.ts.CalendarUtils" xlink:href="src\CalendarUtils.ts"><text x="140.5" y="14.1" stroke="none" text-anchor="middle" data-name="CalendarUtils" data-compartment="0">CalendarUtils</text></a>
+
+</g>
+</g>
+<g transform="translate(668, 174)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CalendarUtils" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="CalendarUtils" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(668, 182)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CalendarUtils" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CalendarUtils" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="CalendarUtils" data-compartment="2">+removeUnselectableWeeks(): void</text>
+<text x="0.0" y="30.3" stroke="none" data-name="CalendarUtils" data-compartment="2">+adjustSlotHeight(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="ToolbarManager">
+<g fill="#eee8d5" stroke="#33322E" data-name="ToolbarManager">
+<rect x="1005.0" y="101.5" height="169.0" width="286.0" data-name="ToolbarManager"></rect>
+<path d="M1005.0 133.5 L1291.0 133.5" fill="none" data-name="ToolbarManager"></path>
+<path d="M1005.0 141.5 L1291.0 141.5" fill="none" data-name="ToolbarManager"></path>
+</g>
+<g transform="translate(1005, 101.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ToolbarManager" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ToolbarManager" data-compartment="0">
+<a id="src\ToolbarManager.ts.ToolbarManager" xlink:href="src\ToolbarManager.ts"><text x="135.0" y="14.1" stroke="none" text-anchor="middle" data-name="ToolbarManager" data-compartment="0">ToolbarManager</text></a>
+
+</g>
+</g>
+<g transform="translate(1005, 133.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ToolbarManager" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ToolbarManager" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(1005, 141.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ToolbarManager" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ToolbarManager" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="ToolbarManager" data-compartment="2">+setupToolbar(): void</text>
+<text x="0.0" y="30.3" stroke="none" data-name="ToolbarManager" data-compartment="2">-setupInitialToolbar(): void</text>
+<text x="0.0" y="46.5" stroke="none" data-name="ToolbarManager" data-compartment="2">-placeProfileImage(): void</text>
+<text x="0.0" y="62.7" stroke="none" data-name="ToolbarManager" data-compartment="2">-rearrangeTodayButton(): void</text>
+<text x="0.0" y="78.9" stroke="none" data-name="ToolbarManager" data-compartment="2">-rearrangeLeftRightButtons(): void</text>
+<text x="0.0" y="95.1" stroke="none" data-name="ToolbarManager" data-compartment="2">-removeLeftRightChunk(): void</text>
+<text x="0.0" y="111.3" stroke="none" data-name="ToolbarManager" data-compartment="2">-replaceNavButtonText(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="MeetingStatus">
+<g fill="lightgreen" stroke="#33322E" data-name="MeetingStatus">
+<rect x="1331.0" y="113.5" height="145.0" width="137.0" data-name="MeetingStatus"></rect>
+<path d="M1331.0 145.5 L1468.0 145.5" fill="none" data-name="MeetingStatus"></path>
+</g>
+<g transform="translate(1331, 113.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MeetingStatus" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="MeetingStatus" data-compartment="0">
+<a id="src\Enums\MeetingStatus.ts.MeetingStatus" xlink:href="src\Enums\MeetingStatus.ts"><text x="60.5" y="14.1" stroke="none" text-anchor="middle" data-name="MeetingStatus" data-compartment="0">MeetingStatus</text></a>
+
+</g>
+</g>
+<g transform="translate(1331, 145.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MeetingStatus" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MeetingStatus" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="MeetingStatus" data-compartment="1">SCHEDULED</text>
+<text x="0.0" y="30.3" stroke="none" data-name="MeetingStatus" data-compartment="1">CANCELLED</text>
+<text x="0.0" y="46.5" stroke="none" data-name="MeetingStatus" data-compartment="1">COMPLETED</text>
+<text x="0.0" y="62.7" stroke="none" data-name="MeetingStatus" data-compartment="1">POSTPONED</text>
+<text x="0.0" y="78.9" stroke="none" data-name="MeetingStatus" data-compartment="1">DRAFT</text>
+<text x="0.0" y="95.1" stroke="none" data-name="MeetingStatus" data-compartment="1">IN_PROGRESS</text>
+
+</g>
+</g>
+</g>
+<g data-name="UserRole">
+<g fill="lightgreen" stroke="#33322E" data-name="UserRole">
+<rect x="1508.0" y="129.5" height="113.0" width="104.0" data-name="UserRole"></rect>
+<path d="M1508.0 161.5 L1612.0 161.5" fill="none" data-name="UserRole"></path>
+</g>
+<g transform="translate(1508, 129.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRole" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserRole" data-compartment="0">
+<a id="src\Enums\UserRole.ts.UserRole" xlink:href="src\Enums\UserRole.ts"><text x="44.0" y="14.1" stroke="none" text-anchor="middle" data-name="UserRole" data-compartment="0">UserRole</text></a>
+
+</g>
+</g>
+<g transform="translate(1508, 161.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserRole" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserRole" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="UserRole" data-compartment="1">STUDENT</text>
+<text x="0.0" y="30.3" stroke="none" data-name="UserRole" data-compartment="1">FACULTY</text>
+<text x="0.0" y="46.5" stroke="none" data-name="UserRole" data-compartment="1">ADMIN</text>
+<text x="0.0" y="62.7" stroke="none" data-name="UserRole" data-compartment="1">UNKNOWN</text>
+
+</g>
+</g>
+</g>
+<g data-name="Admin">
+<g fill="#eee8d5" stroke="#33322E" data-name="Admin">
+<rect x="1366.8" y="420.0" height="96.0" width="243.0" data-name="Admin"></rect>
+<path d="M1366.8 452.0 L1609.8 452.0" fill="none" data-name="Admin"></path>
+<path d="M1366.8 484.0 L1609.8 484.0" fill="none" data-name="Admin"></path>
+</g>
+<g transform="translate(1366.75, 420)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Admin" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Admin" data-compartment="0">
+<a id="src\User System\Admin.ts.Admin" xlink:href="src\User System\Admin.ts"><text x="113.5" y="14.1" stroke="none" text-anchor="middle" data-name="Admin" data-compartment="0">Admin</text></a>
+
+</g>
+</g>
+<g transform="translate(1366.75, 452)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Admin" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Admin" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="Admin" data-compartment="1">+accessLevel: number</text>
+
+</g>
+</g>
+<g transform="translate(1366.75, 484)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Admin" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Admin" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="Admin" data-compartment="2">+canEditCalendar(): boolean</text>
+
+</g>
+</g>
+</g>
+<g data-name="User">
+<g fill="#eee8d5" stroke="#33322E" data-name="User">
+<rect x="1652.0" y="56.5" height="259.0" width="243.0" data-name="User"></rect>
+<path d="M1652.0 88.5 L1895.0 88.5" fill="none" data-name="User"></path>
+<path d="M1652.0 169.5 L1895.0 169.5" fill="none" data-name="User"></path>
+</g>
+<g transform="translate(1652, 56.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="User" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="User" data-compartment="0">
+<a id="src\User System\User.ts.User" xlink:href="src\User System\User.ts"><text x="113.5" y="14.1" stroke="none" text-anchor="middle" data-name="User" data-compartment="0">User</text></a>
+
+</g>
+</g>
+<g transform="translate(1652, 88.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="User" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="User" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="User" data-compartment="1">+id: string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="User" data-compartment="1">+name: string</text>
+<text x="0.0" y="46.5" stroke="none" data-name="User" data-compartment="1">+email: string</text>
+<text x="0.0" y="62.7" stroke="none" data-name="User" data-compartment="1">+role: UserRole</text>
+
+</g>
+</g>
+<g transform="translate(1652, 169.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="User" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="User" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="User" data-compartment="2">+getName(): string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="User" data-compartment="2">+setName(): void</text>
+<text x="0.0" y="46.5" stroke="none" data-name="User" data-compartment="2">+getRole(): UserRole</text>
+<text x="0.0" y="62.7" stroke="none" data-name="User" data-compartment="2">+setRole(): void</text>
+<text x="0.0" y="78.9" stroke="none" data-name="User" data-compartment="2">+getEmail(): string</text>
+<text x="0.0" y="95.1" stroke="none" data-name="User" data-compartment="2">+setEmail(): void</text>
+<text x="0.0" y="111.3" stroke="none" data-name="User" data-compartment="2">+canEditCalendar(): boolean</text>
+<text x="0.0" y="127.5" stroke="none" data-name="User" data-compartment="2">+isAuthenticated(): boolean</text>
+
+</g>
+</g>
+</g>
+<g data-name="Faculty">
+<g fill="#eee8d5" stroke="#33322E" data-name="Faculty">
+<rect x="1649.8" y="412.0" height="112.0" width="243.0" data-name="Faculty"></rect>
+<path d="M1649.8 444.0 L1892.8 444.0" fill="none" data-name="Faculty"></path>
+<path d="M1649.8 492.0 L1892.8 492.0" fill="none" data-name="Faculty"></path>
+</g>
+<g transform="translate(1649.75, 412)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Faculty" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Faculty" data-compartment="0">
+<a id="src\User System\Faculty.ts.Faculty" xlink:href="src\User System\Faculty.ts"><text x="113.5" y="14.1" stroke="none" text-anchor="middle" data-name="Faculty" data-compartment="0">Faculty</text></a>
+
+</g>
+</g>
+<g transform="translate(1649.75, 444)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Faculty" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Faculty" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="Faculty" data-compartment="1">+department: string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="Faculty" data-compartment="1">+officeLocation: string</text>
+
+</g>
+</g>
+<g transform="translate(1649.75, 492)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Faculty" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Faculty" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="Faculty" data-compartment="2">+canEditCalendar(): boolean</text>
+
+</g>
+</g>
+</g>
+<g data-name="Student">
+<g fill="#eee8d5" stroke="#33322E" data-name="Student">
+<rect x="1932.8" y="412.0" height="112.0" width="243.0" data-name="Student"></rect>
+<path d="M1932.8 444.0 L2175.8 444.0" fill="none" data-name="Student"></path>
+<path d="M1932.8 492.0 L2175.8 492.0" fill="none" data-name="Student"></path>
+</g>
+<g transform="translate(1932.75, 412)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Student" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Student" data-compartment="0">
+<a id="src\User System\Student.ts.Student" xlink:href="src\User System\Student.ts"><text x="113.5" y="14.1" stroke="none" text-anchor="middle" data-name="Student" data-compartment="0">Student</text></a>
+
+</g>
+</g>
+<g transform="translate(1932.75, 444)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Student" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Student" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="Student" data-compartment="1">+major: string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="Student" data-compartment="1">+graduationYear: number</text>
+
+</g>
+</g>
+<g transform="translate(1932.75, 492)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Student" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Student" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="Student" data-compartment="2">+canEditCalendar(): boolean</text>
+
+</g>
+</g>
+</g>
+<g data-name="UnknownUser">
+<g fill="#eee8d5" stroke="#33322E" data-name="UnknownUser">
+<rect x="1935.0" y="113.5" height="145.0" width="234.0" data-name="UnknownUser"></rect>
+<path d="M1935.0 145.5 L2169.0 145.5" fill="none" data-name="UnknownUser"></path>
+<path d="M1935.0 210.5 L2169.0 210.5" fill="none" data-name="UnknownUser"></path>
+</g>
+<g transform="translate(1935, 113.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UnknownUser" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UnknownUser" data-compartment="0">
+<a id="src\User System\UnknownUser.ts.UnknownUser" xlink:href="src\User System\UnknownUser.ts"><text x="109.0" y="14.1" stroke="none" text-anchor="middle" data-name="UnknownUser" data-compartment="0">UnknownUser</text></a>
+
+</g>
+</g>
+<g transform="translate(1935, 145.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UnknownUser" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UnknownUser" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="UnknownUser" data-compartment="1">+name: string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="UnknownUser" data-compartment="1">+scheduledBy: string</text>
+<text x="0.0" y="46.5" stroke="none" data-name="UnknownUser" data-compartment="1">+reason: string</text>
+
+</g>
+</g>
+<g transform="translate(1935, 210.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UnknownUser" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UnknownUser" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="UnknownUser" data-compartment="2">+getDisplayName(): string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="UnknownUser" data-compartment="2">+isAuthenticated(): boolean</text>
+
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>

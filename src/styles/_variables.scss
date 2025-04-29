@@ -1,0 +1,36 @@
+$primary-color: #4f46e5;
+
+/* Header variables */
+$selected-date-color: #1f1e1e;
+$selected-date-background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(230, 230, 230, 0.9));
+$header-background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 58%, rgba(147,145,145,1) 85%, rgb(122, 122, 122) 100%);
+
+/* Modal Variables */
+$modal-background: rgba(0, 0, 0, 0.4);
+$modal-header-background: radial-gradient(circle, rgba(194,194,194,1) 23%, rgba(169,169,169,1) 92%, rgba(139,139,139,1) 100%);
+$modal-footer-background: linear-gradient(to bottom, #9e9e9e, #707070);
+$modal-footer-background-hover: linear-gradient(to bottom, #a0a0a0, #333333);
+$confirm-button-color: linear-gradient(145deg, #4CAF50, #43A047);
+$confirm-button-hover-color: linear-gradient(145deg, #66BB6A, #4CAF50);
+$cancel-button-color: linear-gradient(145deg, #EF5350, #E53935);
+$cancel-button-hover-color: linear-gradient(145deg, #EF5350, #D32F2F);
+$modal-content-background: #fff;
+
+/* Spacing Variables */
+/* Toolbar variables */
+$header-toolbar-bottom-margin: .7em;
+$header-toolbar-top-margin: 1.5em;
+
+/* Week View */
+$week-view-event-background: linear-gradient(178deg, rgba(181,255,169,1) 17%, rgba(189,247,159,1) 36%, rgba(130,255,132,1) 66%, rgba(54,235,101,1) 95%);
+$disabled-day-header-background: rgb(128, 128, 128);
+$timegrid-axis-minor-background: rgb(170,170,170);
+$timegrid-axis-major-background: rgb(128, 128, 128);
+
+/* Month View */
+$month-view-day-header-background: linear-gradient(to bottom, #b0b0b0 12%, #949494 40%, #6d6d6d 80%, #5a5a5a 94%, #5a5a5a 100%);
+$month-view-event-background: #d4e1f5;
+
+/* Both Views */
+$disabled-day-background: grey;
+$column-header-background: linear-gradient(0deg, rgba(85,85,85) 0%, rgb(45, 45, 45) 41%);

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty Calendar System</title>
+
+</head>
+<body>
+
+  <div id="calendar-container">
+		<div id="calendar-logo">
+			<div id="div-profile-image">
+				<img id="profile-image" src="src\assets\placeholder-account.jpg" alt="Profile Image">
+			</div>
+			<div id="div-professor-info">
+				<div id="professor-name">
+					<p>Unselected Faculty</p>
+				</div>
+				<div id="office">
+					<p></p>
+				</div>
+			</div>
+		</div>
+		<div id="calendar"></div>
+	</div>
+
+    <!-- Left Navigation Button -->
+	<div class="nav-button left" id="prevButton">
+		<svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M15 18l-6-6 6-6" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+		</svg>
+	</div>
+
+	<!-- Right Navigation Button -->
+	<div class="nav-button right" id="nextButton">
+		<svg class="chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M9 18l6-6-6-6" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+		</svg>
+	</div>
+
+    <!-- Appointment Modal -->
+    <div id="appointmentModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+			<h2>Appointment Details</h2>
+			</div>
+			<div class="modal-body">
+			<label for="fullName">Full Name</label>
+			<input type="text" id="fullName" name="fullName" />
+
+			<label for="email">Email</label>
+			<input type="text" id="email" name="email" />
+
+			<label for="visitCategory">Visit Category</label>
+			<div class="select-wrapper">
+				<div class="select-visitCategory" id="visitCategory">
+				<div class="select-trigger" tabindex="0">&#8203;</div>
+				<div class="select-options visitCategory">
+					<span class="select-option" data-value="Advising">Advising</span>
+					<span class="select-option" data-value="Class Content">Class Content</span>
+					<span class="select-option" data-value="Other">Other</span>
+				</div>
+				</div>
+			</div>
+			<input type="hidden" id="visitCategory" name="visitCategory" value="">
+			
+			<label for="visitReason">Reason for Visit</label>
+			<textarea id="visitReason" name="visitReason"></textarea>
+			
+			<div class="appointment-summary">
+				<div class="summary-line">
+					<span id="selectedFaculty">Faculty: </span>
+					<span id="selectedDayDate"></span>
+				</div>
+				<p id="selectedTime">Time: </p>
+			
+				<div class="modal-footer">
+				<button id="confirmButton">Confirm</button>
+				<button id="cancelButton">Cancel</button>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+
+    <!-- Faculty Profile Modal -->
+	<div id="profileModal" class="modal">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h2>Profile</h2>
+		</div>
+		<div class="modal-body">
+			<div class="profile-carousel">
+			<!-- Carousel Navigation -->
+			<button class="carousel-prev" aria-label="Previous profile">&lsaquo;</button>
+			<button class="carousel-next" aria-label="Next profile">&rsaquo;</button>
+	
+			<!-- Carousel Slides -->
+			<div class="profile-slides">
+				<!-- Slide 1 (Active) -->
+				<div class="profile-slide active">
+				<img src="images\faculty\placeholder-account.jpg" alt="Dr. John Doe" class="profile-image">
+				<div class="profile-info">
+					<h3>John Doe, Ph.D.</h3>
+					<p>Office: Science Building 305</p>
+					<p>Email: john.doe@example.com</p>
+				</div>
+				</div>
+	
+				<!-- Slide 2 -->
+				<div class="profile-slide">
+				<img src="images\faculty\placeholder-account.jpg" alt="Dr. Jane Smith" class="profile-image">
+				<div class="profile-info">
+					<h3>Jane Smith, Ph.D.</h3>
+					<p>Office: Engineering Hall 204</p>
+					<p>Email: jane.smith@example.com</p>
+				</div>
+				</div>
+			</div>
+	
+			<!-- Pagination Dots -->
+			<div class="carousel-dots">
+				<span class="dot active" data-slide="0"></span>
+				<span class="dot" data-slide="1"></span>
+			</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="profile-action" id="profileSettingsButton">Profile Settings</button>
+			<button class="profile-action" id="settingsButton">Calendar Preferences</button>
+		</div>
+		</div>
+	</div>
+
+  <script type="module" src="/src/main.ts"></script>
+
+</body>
+</html>
