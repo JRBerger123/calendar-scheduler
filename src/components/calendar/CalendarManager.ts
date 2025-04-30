@@ -33,23 +33,30 @@ export class CalendarManager {
       return;
     }
 
-    // Get the config from CalendarConfig (which already includes plugins and toolbar)
-    const configObject = {
-      ...this.config.getConfig(),
+    // Wait for the DOM to be fully loaded before initializing the calendar
+    document.addEventListener("DOMContentLoaded", () => {
+      // Get the config from CalendarConfig (which already includes plugins and toolbar)
+      const configObject = {
+        ...this.config.getConfig(),
 
-      datesSet: (dateInfo: any) => {
-        this.handleViewChange(dateInfo.view.type);
-      },
+        datesSet: (dateInfo: any) => {
+          this.handleViewChange(dateInfo.view.type);
+        },
 
-      dateClick: (info: DateClickArg) => {
-        alert(`Clicked on date: ${info.dateStr}`);
-      }
-    };
+        viewDidMount: (info: any) => {
+          //this.handleViewChange(info.view.type);
+        },
 
-    this.calendar = new Calendar(calendarEl, configObject);
-    this.calendar.render();
+        dateClick: (info: DateClickArg) => {
+          alert(`Clicked on date: ${info.dateStr}`);
+        }
+      };
 
-    this.eventHandler = new CalendarEventHandlers(this.calendar); // Pass the calendar instance to the event handler
+      this.calendar = new Calendar(calendarEl, configObject);
+      this.calendar.render();
+
+      this.eventHandler = new CalendarEventHandlers(this.calendar); // Pass the calendar instance to the event handler
+    });
   }
 
   private handleViewChange(currentViewType: string): void {
@@ -58,7 +65,7 @@ export class CalendarManager {
     if (this.lastViewType == null) { // Initial View Loaded ---------------------------------------------------
 
       this.toolbarManager.setupToolbar(true);
-      this.calendar.render();
+      //this.calendar.render();
 
     } 
     
