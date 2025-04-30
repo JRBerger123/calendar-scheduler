@@ -112,10 +112,18 @@ export class CalendarEventHandlers {
                     }
                     break;
                 case "ArrowLeft":
-                    this.navigateView(-1, this.calendar.view.type);
+                    if (this.calendarLogo && this.isModalOpen(this.profileModal)) {
+                        //TODO: Handle profile modal navigation logic here
+                    } else {
+                        this.navigateView(-1, this.calendar.view.type);
+                    }
                     break;
                 case "ArrowRight":
-                    this.navigateView(1, this.calendar.view.type);
+                    if (this.calendarLogo && this.isModalOpen(this.profileModal)) {
+                        //TODO: Handle profile modal navigation logic here
+                    } else {
+                        this.navigateView(1, this.calendar.view.type);
+                    }
                     break;
             }
         });
