@@ -233,7 +233,7 @@ export class CalendarManager {
 
   /**
    * Set how many time slots are in one hour.
-   * The default value is 1.
+   * The default value is 2 (30 minute increments).
    * The range is confined from 1 to 4 for practical reasons.
    * @param slots - The number of time slots per hour.
    */
@@ -247,7 +247,7 @@ export class CalendarManager {
 
   /**
    * The maximum duration of a meeting in minutes.
-   * The default value is the time of one time slot in the calendar.
+   * The default value is 30 minutes.
    * @param duration - The maximum duration of a meeting in minutes.
    */
   public setMaxMeetingDuration(duration: number): void {

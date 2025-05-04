@@ -1,9 +1,18 @@
+import DayCellMountArg from '@fullcalendar/daygrid';
+
+/**
+ * CalendarEventHandlers class for managing event handlers in FullCalendar.
+ */
 export class CalendarEventHandlers {
     private calendar: any;
     private calendarLogo: HTMLElement | null;
     private profileModal: HTMLElement | null;
     private appointmentModal: HTMLElement | null;
 
+    /**
+     * Constructor for CalendarEventHandlers.
+     * @param calendarInstance The FullCalendar instance to attach event handlers to.
+     */
     constructor(calendarInstance: any) {
         this.calendar = calendarInstance;
         this.calendarLogo = document.getElementById("calendar-logo");
@@ -37,7 +46,7 @@ export class CalendarEventHandlers {
         this.addKeyHandlers();
     }
 
-    // -------------------- CLICK HANDLERS --------------------
+    //#region -------------------- CLICK HANDLERS --------------------
 
     /**
      * Adds click event listeners for navigation buttons.
@@ -89,7 +98,9 @@ export class CalendarEventHandlers {
         });
     }
 
-    // -------------------- KEYDOWN HANDLERS --------------------
+    //#endregion
+
+    //#region -------------------- KEYDOWN HANDLERS --------------------
 
     /**
      * Adds keydown event listeners.
@@ -114,14 +125,14 @@ export class CalendarEventHandlers {
                 case "ArrowLeft":
                     if (this.calendarLogo && this.isModalOpen(this.profileModal)) {
                         //TODO: Handle profile modal navigation logic here
-                    } else {
+                    } else if (this.calendarLogo && !this.isModalOpen(this.appointmentModal)) {
                         this.navigateView(-1, this.calendar.view.type);
                     }
                     break;
                 case "ArrowRight":
                     if (this.calendarLogo && this.isModalOpen(this.profileModal)) {
                         //TODO: Handle profile modal navigation logic here
-                    } else {
+                    } else if (this.calendarLogo && !this.isModalOpen(this.appointmentModal)) {
                         this.navigateView(1, this.calendar.view.type);
                     }
                     break;
@@ -129,7 +140,9 @@ export class CalendarEventHandlers {
         });
     }
 
-    // -------------------- UTILITY METHODS --------------------
+    //#endregion
+
+    //#region -------------------- UTILITY METHODS --------------------
 
     /**
      * Navigates the calendar view based on direction and view type.
@@ -190,4 +203,6 @@ export class CalendarEventHandlers {
         }
         return window.getComputedStyle(modal).display !== "none";
     }
+
+    //#endregion
 }
