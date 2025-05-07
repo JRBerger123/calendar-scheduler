@@ -74,12 +74,22 @@ export class CalendarEventHandlers {
     private addProfileModalClickHandlers(): void {
         if (this.calendarLogo) {
             this.calendarLogo.addEventListener("click", () => {
-                this.openModal(this.profileModal);
+            this.openModal(this.profileModal);
             });
         } else {
             console.warn("Calendar logo element not found.");
         }
+        
+        const settingsBtn = document.getElementById("profileSettingsButton");
+        if (settingsBtn) {
+            settingsBtn.addEventListener("click", () => {
+            window.location.href = "/faculty-settings.html";
+            });
+        } else {
+            console.warn("Profile settings button not found.");
+        }
     }
+      
 
     /**
      * Adds global click event listeners for closing modals when clicking outside.

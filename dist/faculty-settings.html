@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty Calendar Settings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" crossorigin src="/faculty-settings.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center p-6">
+  <div class="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-8 space-y-8">
+    <h2 class="text-2xl font-bold border-b pb-4">Faculty Calendar Settings</h2>
+
+    <!-- Profile Info -->
+    <section class="space-y-4">
+      <h3 class="text-xl font-semibold">Profile</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="Name" class="input-style" />
+        <input type="email" placeholder="Email" class="input-style" />
+      </div>
+    </section>
+
+    <!-- Calendar Settings -->
+    <section class="space-y-4">
+      <h3 class="text-xl font-semibold">Calendar Configuration</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-sm font-medium">Working Hours (Start)</span>
+          <input type="time" class="input-style" />
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium">Working Hours (End)</span>
+          <input type="time" class="input-style" />
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium">Time Slots per Hour</span>
+          <select class="input-style">
+            <option value="1">1 (60 min)</option>
+            <option value="2" selected>2 (30 min)</option>
+            <option value="3">3 (20 min)</option>
+            <option value="4">4 (15 min)</option>
+          </select>
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium">Max Meeting Duration (minutes)</span>
+          <input type="number" min="15" max="120" step="15" class="input-style" />
+        </label>
+      </div>
+    </section>
+
+    <!-- Extended Profile Info -->
+  <section class="space-y-4">
+    <h3 class="text-xl font-semibold">Profile Details</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Profile Picture Upload -->
+      <div>
+        <span class="text-sm font-medium block mb-1">Upload Profile Image</span>
+        <input type="file" accept="image/*" id="profileImageInput" class="input-style cursor-pointer" />
+        <img id="profileImagePreview" src="" alt="Profile Preview" class="mt-2 h-24 w-24 object-cover rounded-full border border-gray-300 hidden" />
+      </div>
+
+      <!-- Calendar Color Picker -->
+      <div>
+        <span class="text-sm font-medium block mb-1">Calendar Color</span>
+        <input type="color" id="calendarColor" value="#2563eb" class="w-12 h-12 p-1 rounded-full border border-gray-300" />
+      </div>
+
+      <!-- Office Location -->
+      <input type="text" placeholder="Office Building" class="input-style" />
+      <input type="text" placeholder="Room Number" class="input-style" />
+    </div>
+  </section>
+
+  <!-- Office Hours -->
+  <section class="space-y-4">
+    <h3 class="text-xl font-semibold">Office Hours</h3>
+    <div id="officeHoursContainer" class="space-y-2"></div>
+    <button type="button" id="addOfficeHourBtn" class="text-sm text-blue-600 hover:underline">
+      + Add Office Hour
+    </button>
+  </section>
+
+  <!-- Class Schedule -->
+  <section class="space-y-4">
+    <h3 class="text-xl font-semibold">Class Schedule</h3>
+    <div id="classesContainer" class="space-y-6"></div>
+    <button type="button" id="addClassBtn" class="text-sm text-blue-600 hover:underline">
+      + Add Class
+    </button>
+  </section>
+
+
+  <!-- Actions -->
+  <div class="flex justify-end space-x-4 pt-4 border-t">
+    <button id="resetSettingsBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg font-medium">
+      Reset
+    </button>
+    <button id="cancelSettingsBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium">
+      Cancel
+    </button>
+    <button id="saveSettingsBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">
+      Save Settings
+    </button>
+  </div> 
+
+  <style>
+    .input-style {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      background-color: #f9fafb;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-style:focus {
+      border-color: #2563eb;
+      background-color: white;
+    }
+  </style>
+</body>
+</html>
+
