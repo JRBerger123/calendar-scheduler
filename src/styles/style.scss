@@ -841,3 +841,72 @@ to {
   background-color: var(--flash-red-end);
 }
 }
+
+.overlay-timeslot.fc-unselectable {
+  background-color: rgba(128, 128, 128, 1) !important; /* Solid color for disabled state */
+  pointer-events: none;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  display: block !important;
+  cursor: not-allowed;
+  position: relative;
+  background: #e8e8e8; /* Base color for depth perception */
+  isolation: isolate;
+  border-radius: 2px; /* Subtle rounding for modern UI */
+  overflow: hidden; /* Contain pseudo-elements */
+
+  /* Multi-layer inset shadow system */
+  box-shadow: 
+    inset 0 3px 6px rgba(0, 0, 0, 0.12),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.8),
+    inset 2px 0 4px rgba(0, 0, 0, 0.1),
+    inset -2px 0 4px rgba(0, 0, 0, 0.1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: 
+      /* Depth-enhancing gradient overlay */
+      linear-gradient(
+        145deg,
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(0, 0, 0, 0.05) 50%,
+        rgba(255, 255, 255, 0.05) 100%
+      ),
+      /* Dynamic diagonal pattern */
+      repeating-linear-gradient(
+        -45deg,
+        transparent 0 6px,
+        rgba(0, 0, 0, 0.08) 6px 12px
+      );
+    mix-blend-mode: multiply;
+    filter: drop-shadow(0 6px 1px rgba(0, 0, 0, 0.1));
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: 
+      /* Inner border effect */
+      linear-gradient(
+        to bottom right,
+        rgba(0, 0, 0, 0.15) 0%,
+        rgba(180, 0, 0, 0.05) 100%
+      ),
+      /* Depth base layer */
+      linear-gradient(
+        45deg,
+        #d8d8d8 0%,
+        #e0e0e0 100%
+      );
+    mask: 
+      linear-gradient(#000, #000) content-box,
+      linear-gradient(#000, #000);
+    mask-composite: exclude;
+    padding: 1px; /* Border width */
+  }
+}

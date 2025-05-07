@@ -94,7 +94,7 @@ export class CalendarManager {
       this.calendar.render();
 
       // Initialize the custom event handlers for the calendar
-      this.eventHandler = new CalendarEventHandlers(this.calendar);
+      this.eventHandler = new CalendarEventHandlers(this.calendar, this.config.getTotalSlotsPerDay());
     });
   }
 
@@ -105,11 +105,26 @@ export class CalendarManager {
    */
   private handleViewChange(currentViewType: string): void {
     const calendarEl = document.getElementById("calendar") as HTMLElement;
+    const workingHours = this.config.getWorkingHours();
+    const timeSlotsPerHour = this.config.getTimeSlotsPerHour();
+    const firstDay = this.calendar.view.currentStart;
+    const lastDay = this.calendar.view.currentEnd;
+
+    // Adjust for weekends
+    firstDay.setDate(firstDay.getDate() + 1);
+    lastDay.setDate(lastDay.getDate() - 2);
 
     //#region Initial View Loaded
     if (this.lastViewType == null) {
       this.toolbarManager.setupToolbar(true);
       this.utils.adjustSlotHeight(calendarEl, this.config.getTotalSlotsPerDay());
+
+      if (currentViewType === 'timeGridWeek') {
+        this.calendar.render();
+        this.utils.overlayAllTimeslots(calendarEl);
+        this.utils.updateTimeslotOverlays(workingHours.start, timeSlotsPerHour, firstDay, calendarEl);
+        this.startTimeslotUpdater();
+      }
     } 
     //#endregion Initial View Loaded
     
@@ -135,6 +150,12 @@ export class CalendarManager {
 
       this.toolbarManager.setupToolbar(false);
       this.utils.adjustSlotHeight(calendarEl, this.config.getTotalSlotsPerDay());
+
+      this.calendar.render(); // First render of the calendar to allow the creation of the overlay timeslots
+
+      this.utils.overlayAllTimeslots(calendarEl);
+      this.utils.updateTimeslotOverlays(workingHours.start, timeSlotsPerHour, firstDay, calendarEl);
+      this.startTimeslotUpdater();
 
     }
     //#endregion Week View Loaded
@@ -309,4 +330,55 @@ export class CalendarManager {
     }
     this.initialize();
   }
+
+  /**
+   * Starts a timer that updates timeslot overlays when a new timeslot begins.
+   */
+  private startTimeslotUpdater(): void {
+    const slotsPerHour = this.config.getTimeSlotsPerHour();
+    const slotDurationMs = (60 / slotsPerHour) * 60 * 1000;
+
+    const now = new Date();
+    const currentMinutes = now.getMinutes();
+    const currentSeconds = now.getSeconds();
+    const currentMilliseconds = now.getMilliseconds();
+
+    // Calculate the delay until the next slot boundary
+    const minutesPerSlot = 60 / slotsPerHour;
+    const nextSlotMinute = Math.ceil(currentMinutes / minutesPerSlot) * minutesPerSlot;
+    const msUntilNextSlot = 
+        ((nextSlotMinute - currentMinutes) * 60 * 1000) - 
+        (currentSeconds * 1000) - 
+        currentMilliseconds;
+
+    /*
+    const hours = Math.floor(msUntilNextSlot / (1000 * 60 * 60));
+    const minutes = Math.floor((msUntilNextSlot % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((msUntilNextSlot % (1000 * 60)) / 1000);
+
+    // Used for debugging purposes
+    console.log(`Next update in ${hours}h ${minutes}m ${seconds}s`);
+    */
+
+    // Start the first update at the calculated time, then repeat at slot intervals
+    setTimeout(() => {
+      this.utils.updateTimeslotOverlays(
+        this.config.getWorkingHours().start,
+        this.config.getTimeSlotsPerHour(),
+        this.calendar.view.currentStart,
+        document.getElementById(this.elementId) as HTMLElement
+      );
+
+      // Start regular updates at slot intervals
+      setInterval(() => {
+        this.utils.updateTimeslotOverlays(
+          this.config.getWorkingHours().start,
+          this.config.getTimeSlotsPerHour(),
+          this.calendar.view.currentStart,
+          document.getElementById(this.elementId) as HTMLElement
+        );
+      }, slotDurationMs);
+    }, msUntilNextSlot);
+  }
+
 }

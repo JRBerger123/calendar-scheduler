@@ -50,7 +50,13 @@ export class CalendarUtils {
       });
     }
 
-    adjustSlotHeight(calendarEl: HTMLElement, totalSlots: number): void {
+    /**
+     * Adjusts the height of each time slot in the calendar based on the total number of slots.
+     * This is useful for ensuring that all slots fit within the available height of the calendar.
+     * @param calendarEl The FullCalendar element to adjust.
+     * @param totalSlots The total number of time slots to display.
+     */
+    public adjustSlotHeight(calendarEl: HTMLElement, totalSlots: number): void {
         const timeGridSlots = calendarEl.querySelector(".fc-timegrid-slots") as HTMLElement | null;
         const headerToolbar = calendarEl.querySelector(".fc-header-toolbar") as HTMLElement | null;
         const dayHeader = calendarEl.querySelector(".fc-col-header") as HTMLElement | null;
@@ -135,4 +141,92 @@ export class CalendarUtils {
         }
       });
     }
+
+    /**
+     * Overlays all timeslots in the calendar with new timeslots.
+     * This is useful for visualizing the available time slots in the calendar.
+     * Full calendar does not have divs for each timeslot, so we create them manually.
+     * @param calendarEl The FullCalendar element to overlay.
+     */
+    public overlayAllTimeslots(calendarEl: HTMLElement): void {
+      const calendarBody = calendarEl.querySelector(".fc-timegrid-body") as HTMLElement;
+      const slots = calendarBody.querySelectorAll(".fc-timegrid-slot-lane") as NodeListOf<HTMLElement>;
+      const days = calendarEl.querySelectorAll(".fc-col-header-cell") as NodeListOf<HTMLElement>;
+    
+      // Remove existing overlays
+      const overlays = calendarBody.getElementsByClassName('overlay-timeslot');
+      while (overlays.length > 0) {
+        overlays[0].parentNode?.removeChild(overlays[0]);
+      }
+    
+      days.forEach((dayColumn, colIndex) => {
+        const xPos = dayColumn.offsetLeft;
+        const colWidth = dayColumn.offsetWidth;
+    
+        slots.forEach((row, rowIndex) => {
+          const yPos = row.offsetTop;
+          const rowHeight = row.offsetHeight;
+    
+          const overlayId = `overlay-col-${colIndex}-row-${rowIndex}`;
+          const overlay = document.createElement("div");
+          overlay.className = 'overlay-timeslot';
+          overlay.id = overlayId;
+          overlay.style.position = "absolute";
+          overlay.style.top = `${yPos}px`;
+          overlay.style.left = `${xPos}px`;
+          overlay.style.width = `${colWidth}px`;
+          overlay.style.height = `${rowHeight}px`;
+          overlay.style.pointerEvents = "none";
+          //overlay.style.borderLeft = "1px solid white";
+          //overlay.style.borderRight = "1px solid white";
+          calendarBody.appendChild(overlay);
+        });
+      });
+    }
+        
+    public updateTimeslotOverlays(
+      startingWorkHour: number,
+      slotsPerHour: number,
+      viewStartDate: Date,
+      calendarEl: HTMLElement,
+      unselectableTimeWindow: number = 0 // in minutes
+    ): void {
+      const now = new Date();
+      const unselectableWindowMs = unselectableTimeWindow * 60 * 1000;
+
+      now.setSeconds(0, 0); // Strip seconds and milliseconds for comparison
+      const dayColumns = calendarEl.querySelectorAll<HTMLElement>('.fc-col-header-cell');
+      const timeSlots = calendarEl.querySelectorAll<HTMLElement>('.fc-timegrid-slot-lane');
+    
+      dayColumns.forEach((dayColumn, colIndex) => {
+        const columnDate = new Date(viewStartDate);
+        columnDate.setDate(viewStartDate.getDate() + colIndex);
+        columnDate.setHours(0, 0, 0, 0);
+    
+        timeSlots.forEach((timeSlot, rowIndex) => {
+          const slotHour = startingWorkHour + Math.floor(rowIndex / slotsPerHour);
+          const slotMinutes = (rowIndex % slotsPerHour) * (60 / slotsPerHour);
+          const slotTime = new Date(columnDate);
+          slotTime.setHours(slotHour, slotMinutes, 0, 0);
+    
+          const overlay = document.getElementById(`overlay-col-${colIndex}-row-${rowIndex}`) as HTMLElement | null;
+    
+          if (overlay) {
+            // Calculate time difference in milliseconds
+            const timeDiff = slotTime.getTime() - now.getTime();
+
+            // Determine if this slot is in the past or in the future
+            const isPast = slotTime < now;
+            const inUnselectableWindow = timeDiff > 0 && timeDiff <= unselectableWindowMs;
+    
+            // Toggle overlay visibility using class for better performance
+            overlay.classList.toggle('fc-unselectable', isPast || inUnselectableWindow);
+    
+            // Data attributes for debugging
+            overlay.dataset.slotTime = slotTime.toISOString();
+          }
+        });
+      });
+    }
+    
 }

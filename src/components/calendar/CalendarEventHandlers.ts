@@ -1,4 +1,5 @@
 import DayCellMountArg from '@fullcalendar/daygrid';
+import { CalendarUtils } from './CalendarUtils';
 
 /**
  * CalendarEventHandlers class for managing event handlers in FullCalendar.
@@ -8,16 +9,21 @@ export class CalendarEventHandlers {
     private calendarLogo: HTMLElement | null;
     private profileModal: HTMLElement | null;
     private appointmentModal: HTMLElement | null;
+    private totalSlots: number;
+    private utils: CalendarUtils;
 
     /**
      * Constructor for CalendarEventHandlers.
      * @param calendarInstance The FullCalendar instance to attach event handlers to.
      */
-    constructor(calendarInstance: any) {
+    constructor(calendarInstance: any, totalSlots: number) {
         this.calendar = calendarInstance;
         this.calendarLogo = document.getElementById("calendar-logo");
         this.profileModal = document.getElementById("profileModal");
         this.appointmentModal = document.getElementById("appointmentModal");
+        this.totalSlots = totalSlots;
+
+        this.utils = new CalendarUtils();        
 
         this.initializeEventHandlers();
     }
@@ -28,6 +34,7 @@ export class CalendarEventHandlers {
     private initializeEventHandlers(): void {
         this.setupClickHandlers();
         this.setupKeydownHandlers();
+        this.setupWindowHandlers(this.calendar.el);
     }
 
     /**
@@ -105,6 +112,28 @@ export class CalendarEventHandlers {
             if (this.appointmentModal && target === this.appointmentModal) {
                 this.closeModal(this.appointmentModal);
             }
+        });
+    }
+
+    //#endregion
+
+    //#region -------------------- WINDOW HANDLERS --------------------
+
+    private setupWindowHandlers(calendarEl: HTMLElement): void {
+        window.addEventListener("resize", () => {
+            // Dynamically sizes calendar when Window is resized
+            requestAnimationFrame(() => {
+            this.utils.adjustSlotHeight(calendarEl, this.totalSlots);
+        
+            // Reload the view to force a re-render
+            // This was necessary to fix the issue where the calendar would not resize properly when the window was resized vertically
+            this.calendar.changeView(this.calendar.view.type);
+            });
+        });
+        
+        // Add event listener for orientation change to adjust slot height
+        window.addEventListener("orientationchange", () => {
+            this.utils.adjustSlotHeight(calendarEl, this.totalSlots);
         });
     }
 

@@ -105,6 +105,14 @@ export class CalendarConfig {
   }
 
   /**
+   * Gets the working hours for the calendar.
+   * @returns {object} An object containing start and end times in 24-hour format.
+   */
+  getWorkingHours(): { start: number; end: number } {
+    return this.workingHours;
+  }
+
+  /**
    * Sets the number of time slots per hour for the calendar.
    * @param value Number of time slots per hour (1-4)
    */
